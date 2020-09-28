@@ -1,5 +1,11 @@
-import React, { useEffect } from 'react';
-import { View, FlatList, useWindowDimensions, Text, Image } from 'react-native';
+import React, { useCallback, useEffect } from 'react';
+import {
+  View,
+  FlatList,
+  useWindowDimensions,
+  Text,
+  ViewToken,
+} from 'react-native';
 import { useSubject } from '../lib/useSubject';
 import { album$, initializeAlbum } from '../lib/PanoAlbum';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -12,6 +18,14 @@ export default function PanoList() {
   useEffect(() => {
     initializeAlbum();
   }, []);
+
+  const onViewableItemsChanged = useCallback(
+    (info: { viewableItems: ViewToken[]; changed: ViewToken[] }) => {
+      console.log(info.viewableItems);
+    },
+    []
+  );
+
   return (
     <View style={{ flex: 1, backgroundColor: '#000' }}>
       <FlatList
@@ -34,20 +48,26 @@ export default function PanoList() {
         contentInsetAdjustmentBehavior="never"
         style={{ flex: 1 }}
         data={album}
-        contentContainerStyle={{ minHeight: window.height }}
-        getItemLayout={(data, index) => {
-          const height = PanoItem.getHeight(data![index], window);
+        // getItemLayout={(data, index) => {
+        //   const height = PanoItem.getHeight(data![index], window);
 
-          return {
-            index,
-            length: height,
-            offset: height * index + 80 + insets.top,
-          };
-        }}
+        //   return {
+        //     index,
+        //     length: height,
+        //     offset: height * index + 80 + insets.top,
+        //   };
+        // }}
         renderItem={(data) => {
           return <PanoItem window={window} {...data} />;
         }}
+        viewabilityConfig={PanoList.viewabilityConfig}
+        onViewableItemsChanged={onViewableItemsChanged}
       />
     </View>
   );
 }
+
+PanoList.viewabilityConfig = {
+  itemVisiblePercentThreshold: 0.1,
+  minimumViewTime: 250,
+};

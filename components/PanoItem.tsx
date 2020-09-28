@@ -36,9 +36,15 @@ export default function PanoItem({ item: asset, index, window }: IPanoItem) {
         />
       </SharedElement>
       <View style={{ paddingHorizontal: 10, paddingTop: 10 }}>
-        <Text style={{ color: '#fff' }}>{address}</Text>
-        <Text style={{ color: '#fff' }}>created {info.createdAt.from}</Text>
-        <Text style={{ color: '#fff' }}>updated {info.updatedAt.from}</Text>
+        <Text style={{ color: '#fff' }} numberOfLines={1}>
+          {address}
+        </Text>
+        <Text style={{ color: '#fff' }} numberOfLines={1}>
+          created {info.createdAt.from}
+        </Text>
+        <Text style={{ color: '#fff' }} numberOfLines={1}>
+          updated {info.updatedAt.from}
+        </Text>
       </View>
     </TouchableOpacity>
   );
@@ -50,5 +56,5 @@ PanoItem.getHeight = function (
   item: MediaLibrary.Asset,
   window: ScaledSize
 ): number {
-  return Math.floor(item.height * window.width) / item.width + this.infoHeight;
+  return Math.ceil((item.height * window.width) / item.width) + this.infoHeight;
 };

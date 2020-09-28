@@ -4,8 +4,8 @@ import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import * as Location from 'expo-location';
 import { useEffect, useState } from 'react';
-import { getLibraryPermissions } from './SelectedImage';
-import { Alert } from 'react-native';
+import { Alert, Platform } from 'react-native';
+import { getAddress } from './Addresses';
 
 dayjs.extend(relativeTime);
 
@@ -82,15 +82,19 @@ export function useAssetInfoAddress(info: AssetInfo) {
 
 interface ILoadPanos {
   total?: number;
-  after?: string | MediaLibrary.Asset | undefined;
+  after?: string | MediaLibrary.Asset;
+  album?: MediaLibrary.Album;
 }
 
 async function loadPhotos({
   total,
   after,
+  album,
 }: ILoadPanos): Promise<MediaLibrary.PagedInfo<MediaLibrary.Asset>> {
   return MediaLibrary.getAssetsAsync({
-    sortBy: MediaLibrary.SortBy.modificationTime,
+    album,
+    sortBy:
+      Platform.OS === 'ios' ? MediaLibrary.SortBy.modificationTime : undefined,
     first: total,
     after,
   });
@@ -100,13 +104,34 @@ function filterPanos(assets: MediaLibrary.Asset[]): MediaLibrary.Asset[] {
   return assets.filter((asset) => asset.mediaSubtypes?.includes('panorama'));
 }
 
+async function getLibraryPermissions() {
+  if (Platform.OS !== 'web') {
+    const { status } = await MediaLibrary.requestPermissionsAsync();
+    if (status !== 'granted') {
+      throw new Error('Permission Required');
+    }
+  }
+}
+
 export async function initializeAlbum() {
   try {
     await getLibraryPermissions();
 
     let panos: MediaLibrary.Asset[] = [];
 
-    let currentRequest = await loadPhotos({ total: 20 });
+    let album;
+
+    if (Platform.OS === 'android') {
+      const albums = await MediaLibrary.getAlbumsAsync();
+
+      const album = albums.find((album) => album.title === 'Camera');
+
+      if (!album) {
+        return;
+      }
+    }
+
+    let currentRequest = await loadPhotos({ total: 20, album });
 
     panos = panos.concat(filterPanos(currentRequest.assets));
 
@@ -114,6 +139,7 @@ export async function initializeAlbum() {
       currentRequest = await loadPhotos({
         total: 20,
         after: currentRequest.endCursor,
+        album,
       });
 
       panos = panos.concat(filterPanos(currentRequest.assets));
@@ -123,32 +149,4 @@ export async function initializeAlbum() {
   } catch (error) {
     Alert.alert('Error', error.message);
   }
-}
-
-async function getAddress(
-  coordinates: Promise<MediaLibrary.Location | undefined>
-): Promise<string> {
-  const coords = await coordinates;
-
-  if (!coords) {
-    return '';
-  }
-
-  let text = '';
-
-  try {
-    const placemarks = await Location.reverseGeocodeAsync(coords);
-
-    placemarks.find((placemark) => {
-      if (placemark.city && placemark.country) {
-        text = `${placemark.city}, ${placemark.country}`;
-        return true;
-      } else if (placemark.name) {
-        text = placemark.name;
-        return true;
-      }
-    });
-  } catch (error) {}
-
-  return text;
 }
