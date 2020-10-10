@@ -10,9 +10,6 @@ export default function ReselectPano() {
   return (
     <TouchableOpacity
       style={{
-        position: 'absolute',
-        top: insets.top + 10,
-        left: 10,
         backgroundColor: 'rgba(255,255,255,0.1)',
         borderRadius: 10,
         flexDirection: 'row',

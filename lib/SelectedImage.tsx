@@ -3,7 +3,7 @@ import * as ImagePicker from 'expo-image-picker';
 import * as Permissions from 'expo-permissions';
 import { Platform } from 'react-native';
 
-interface IImageSource {
+export interface IImageSource {
   height: number;
   width: number;
   uri: string;

@@ -8,11 +8,12 @@ import { enableScreens } from 'react-native-screens';
 import 'react-native-gesture-handler';
 import { NavigationContainer } from '@react-navigation/native';
 import createSharedElementStackNavigator from 'react-navigation-shared-element/build/createSharedElementStackNavigator';
+import HomeScreen from './components/HomeScreen';
 
 enableScreens();
 
 export type RootStackParamList = {
-  Main: undefined;
+  Slyce: undefined;
   Splitter: { id: string };
 };
 
@@ -24,7 +25,7 @@ export default function App() {
       <View style={styles.container}>
         <NavigationContainer>
           <Stack.Navigator headerMode="none">
-            <Stack.Screen name="Main" component={PanoList} />
+            <Stack.Screen name="Slyce" component={HomeScreen} />
             <Stack.Screen
               name="Splitter"
               component={ImagePreview}

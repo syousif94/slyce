@@ -10,6 +10,7 @@ import { useSubject } from '../lib/useSubject';
 import { album$, initializeAlbum } from '../lib/PanoAlbum';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import PanoItem from './PanoItem';
+import EmptyPanoView from './EmptyPanoView';
 
 export default function PanoList() {
   const insets = useSafeAreaInsets();
@@ -29,6 +30,7 @@ export default function PanoList() {
   return (
     <View style={{ flex: 1, backgroundColor: '#000' }}>
       <FlatList
+        ListEmptyComponent={EmptyPanoView}
         ListHeaderComponent={() => (
           <View
             style={{
@@ -48,15 +50,6 @@ export default function PanoList() {
         contentInsetAdjustmentBehavior="never"
         style={{ flex: 1 }}
         data={album}
-        // getItemLayout={(data, index) => {
-        //   const height = PanoItem.getHeight(data![index], window);
-
-        //   return {
-        //     index,
-        //     length: height,
-        //     offset: height * index + 80 + insets.top,
-        //   };
-        // }}
         renderItem={(data) => {
           return <PanoItem window={window} {...data} />;
         }}

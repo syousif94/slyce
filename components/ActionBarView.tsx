@@ -15,10 +15,13 @@ export default function ActionBarView({
       style={[
         {
           position: 'absolute',
+          maxWidth: 400,
+          alignSelf: 'center',
           bottom: 0,
-          right: 0,
-          left: 0,
+          width: '100%',
+          top: 0,
           paddingBottom: insets.bottom,
+          justifyContent: 'flex-end',
         },
         style,
       ]}

@@ -1,110 +1,181 @@
-import React from 'react';
-import { Text, TouchableOpacity, View } from 'react-native';
+import React, { ReactNode, useState } from 'react';
+import { Text, View, ViewStyle } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import ActionBarView from './ActionBarView';
 import { useSubject } from '../lib/useSubject';
-import { getRatio } from '../lib/CropSettings';
-import {
-  numberOfSlices$,
-  decrementSlices,
-  incrementSlices,
-  sliceImage,
-} from '../lib/CropSettings';
+import { decrementSlices, incrementSlices } from '../lib/CropSettings';
+import { numberOfSlices$ } from '../lib/CropSettings';
+import Control from './Control';
+import ReselectPano from './ReselectPano';
+import PlusMinusControl from './PlusMinusControl';
+import TrimControl from './TrimControl';
+
+enum EditorState {
+  Slice,
+  Trim,
+}
 
 export default function SliceBar() {
-  const numberOfSlices = useSubject(numberOfSlices$);
-  const disableDecrement = numberOfSlices <= 2;
-  const ratio = getRatio()! * 9;
-  const lessThan16By9 = ratio > 16;
+  const [editorState, setEditorState] = useState(EditorState.Trim);
   return (
     <ActionBarView>
-      <View
-        style={{
-          alignItems: 'center',
-          marginBottom: 40,
-        }}
-        pointerEvents="box-none"
-      >
-        <TouchableOpacity
-          style={{
-            backgroundColor: 'rgba(255,255,255,0.1)',
-            borderRadius: 10,
-            flexDirection: 'row',
-            alignItems: 'center',
-            paddingVertical: 8,
-            paddingHorizontal: 12,
-          }}
-          onPress={sliceImage}
-        >
-          <MaterialCommunityIcons name="crop" size={28} color="#fff" />
-          <Text
-            style={{
-              fontSize: 12,
-              fontWeight: '400',
-              color: '#fff',
-              marginLeft: 10,
+      {(() => {
+        switch (editorState) {
+          case EditorState.Slice:
+            return <SlicesManipulator />;
+          case EditorState.Trim:
+            return <TrimControl />;
+        }
+      })()}
+      <BottomBar>
+        <ReselectPano />
+        <View style={{ flexDirection: 'row' }}>
+          <TrimToggle
+            disabled={editorState == EditorState.Trim}
+            onToggle={() => {
+              setEditorState(EditorState.Trim);
             }}
-          >
-            Slice Panorama
-          </Text>
-          <Text
-            style={{
-              fontSize: 12,
-              fontWeight: '700',
-              color: lessThan16By9 ? 'red' : 'yellow',
-              marginLeft: 10,
+            controlStyle={{
+              borderTopRightRadius: 0,
+              borderBottomRightRadius: 0,
+              marginRight: 3,
+              backgroundColor:
+                editorState == EditorState.Trim
+                  ? 'rgba(255,255,255,0.25)'
+                  : 'rgba(255,255,255,0.1)',
             }}
-          >
-            {ratio.toFixed(2)} : 9
-          </Text>
-        </TouchableOpacity>
-      </View>
-      <View
-        style={{
-          alignItems: 'center',
-          flexDirection: 'row',
-          justifyContent: 'center',
-          marginBottom: 20,
-        }}
-        pointerEvents="box-none"
-      >
-        <TouchableOpacity
-          disabled={disableDecrement}
-          style={{
-            backgroundColor: 'rgba(255,255,255,0.1)',
-            borderRadius: 10,
-            flexDirection: 'row',
-            alignItems: 'center',
-            paddingVertical: 8,
-            paddingHorizontal: 12,
-          }}
-          onPress={decrementSlices}
-        >
-          <MaterialCommunityIcons
-            name="minus"
-            size={28}
-            color={disableDecrement ? '#555' : '#fff'}
           />
-        </TouchableOpacity>
-        <View style={{ width: 140, alignItems: 'center' }}>
-          <Text style={{ fontSize: 30, fontWeight: '700', color: '#fff' }}>
-            {numberOfSlices}
-          </Text>
+          <SliceToggle
+            disabled={editorState == EditorState.Slice}
+            onToggle={() => {
+              setEditorState(EditorState.Slice);
+            }}
+            controlStyle={{
+              borderTopLeftRadius: 0,
+              borderBottomLeftRadius: 0,
+              backgroundColor:
+                editorState == EditorState.Slice
+                  ? 'rgba(255,255,255,0.25)'
+                  : 'rgba(255,255,255,0.1)',
+            }}
+          />
         </View>
-        <TouchableOpacity
-          style={{
-            backgroundColor: 'rgba(255,255,255,0.1)',
-            borderRadius: 10,
-            flexDirection: 'row',
-            alignItems: 'center',
-            paddingVertical: 8,
-            paddingHorizontal: 12,
-          }}
-          onPress={incrementSlices}
-        >
-          <MaterialCommunityIcons name="plus" size={28} color="#fff" />
-        </TouchableOpacity>
-      </View>
+        <ExportControl />
+      </BottomBar>
     </ActionBarView>
   );
 }
+
+function ExportControl() {
+  return (
+    <Control
+      touchableStyle={{
+        ...ToggleControlStyle,
+      }}
+    >
+      <MaterialCommunityIcons name="share" size={20} color="#fff" />
+      <Text
+        style={{
+          fontSize: 12,
+          fontWeight: '700',
+          color: '#fff',
+          marginLeft: 10,
+        }}
+      >
+        EXPORT
+      </Text>
+    </Control>
+  );
+}
+
+const SlicesManipulator = () => {
+  const slices = useSubject(numberOfSlices$);
+
+  return (
+    <View style={{ marginBottom: 40 }} pointerEvents="box-none">
+      <PlusMinusControl
+        currentValue={slices}
+        disableDecrement={slices <= 2}
+        onIncrement={incrementSlices}
+        onDecrement={decrementSlices}
+      />
+    </View>
+  );
+};
+
+const BottomBar = ({ children }: { children: ReactNode }) => {
+  return (
+    <View
+      style={{
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        paddingBottom: 20,
+        paddingHorizontal: 20,
+      }}
+    >
+      {children}
+    </View>
+  );
+};
+
+interface IToggleProps {
+  onToggle: () => void;
+  controlStyle?: ViewStyle;
+  disabled?: boolean;
+}
+
+const ToggleControlStyle: ViewStyle = {
+  flexDirection: 'row',
+  alignItems: 'center',
+  paddingVertical: 8,
+  paddingHorizontal: 12,
+};
+
+const SliceToggle = ({ onToggle, controlStyle, disabled }: IToggleProps) => {
+  return (
+    <Control
+      touchableStyle={{ ...ToggleControlStyle, ...controlStyle }}
+      onPress={onToggle}
+      disabled={disabled}
+    >
+      <MaterialCommunityIcons
+        name="scissors-cutting"
+        size={20}
+        color="#fff"
+        style={{ transform: [{ rotate: '45deg' }, { translateY: -2 }] }}
+      />
+      <Text
+        style={{
+          fontSize: 12,
+          fontWeight: '700',
+          color: '#fff',
+          marginLeft: 10,
+        }}
+      >
+        SLICE
+      </Text>
+    </Control>
+  );
+};
+
+const TrimToggle = ({ onToggle, controlStyle, disabled }: IToggleProps) => {
+  return (
+    <Control
+      touchableStyle={{ ...ToggleControlStyle, ...controlStyle }}
+      onPress={onToggle}
+      disabled={disabled}
+    >
+      <MaterialCommunityIcons name="aspect-ratio" size={20} color="#fff" />
+      <Text
+        style={{
+          fontSize: 12,
+          fontWeight: '700',
+          color: '#fff',
+          marginLeft: 10,
+        }}
+      >
+        TRIM
+      </Text>
+    </Control>
+  );
+};

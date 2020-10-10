@@ -1,23 +1,33 @@
 import { BehaviorSubject } from 'rxjs';
-import { selectedImage$ } from './SelectedImage';
+import { selectedImage$, IImageSource } from './SelectedImage';
 import * as ImageManipulator from 'expo-image-manipulator';
 import { Alert } from 'react-native';
 import * as MediaLibrary from 'expo-media-library';
 
 export const numberOfSlices$ = new BehaviorSubject(2);
+export const topOffset$ = new BehaviorSubject(0);
+export const bottomOffset$ = new BehaviorSubject(0);
+export const leftOffset$ = new BehaviorSubject(0);
+export const rightOffset$ = new BehaviorSubject(0);
 
-export function getRatio() {
-  const selectedImage = selectedImage$.value;
+export function getRatio(
+  selectedImage: IImageSource,
+  numberOfSlices: number,
+  topOffset: number,
+  bottomOffset: number,
+  leftOffset: number,
+  rightOffset: number
+) {
+  const sliceWidth =
+    (selectedImage.width -
+      ((leftOffset + rightOffset) / 100) * selectedImage.width) /
+    numberOfSlices;
 
-  if (!selectedImage) {
-    return;
-  }
-
-  const sliceCount = numberOfSlices$.value;
-
-  const sliceWidth = selectedImage.width / sliceCount;
-
-  return sliceWidth / selectedImage.height;
+  return (
+    sliceWidth /
+    (selectedImage.height -
+      ((topOffset + bottomOffset) / 100) * selectedImage.height)
+  );
 }
 
 export function incrementSlices() {
