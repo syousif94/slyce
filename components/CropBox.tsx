@@ -55,11 +55,10 @@ export default function CropBox() {
         bottom: 0,
         flexDirection: 'row',
         justifyContent: 'space-evenly',
-        borderTopWidth: correctedTop,
-        borderLeftWidth: correctedLeft,
-        borderRightWidth: correctedRight,
-        borderBottomWidth: correctedBottom,
-        borderColor: 'rgba(0,0,0,0.75)',
+        paddingTop: correctedTop,
+        paddingLeft: correctedLeft,
+        paddingRight: correctedRight,
+        paddingBottom: correctedBottom,
       }}
     >
       {bars}
@@ -70,6 +69,20 @@ export default function CropBox() {
           left: 0,
           right: 0,
           bottom: 0,
+          borderTopWidth: correctedTop,
+          borderLeftWidth: correctedLeft,
+          borderRightWidth: correctedRight,
+          borderBottomWidth: correctedBottom,
+          borderColor: 'rgba(0,0,0,0.9)',
+        }}
+      />
+      <View
+        style={{
+          position: 'absolute',
+          top: correctedTop,
+          left: correctedLeft,
+          right: correctedRight,
+          bottom: correctedBottom,
           borderWidth: 1,
           borderTopColor: getBarColor(topOffset),
           borderLeftColor: getBarColor(leftOffset),

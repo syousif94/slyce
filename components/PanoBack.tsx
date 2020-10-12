@@ -1,11 +1,9 @@
 import React from 'react';
 import { TouchableOpacity } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { Feather } from '@expo/vector-icons';
 
-export default function ReselectPano() {
-  const insets = useSafeAreaInsets();
+export default function PanoBack() {
   const navigation = useNavigation();
   return (
     <TouchableOpacity
@@ -14,7 +12,7 @@ export default function ReselectPano() {
         borderRadius: 10,
         flexDirection: 'row',
         alignItems: 'center',
-        paddingVertical: 8,
+        paddingVertical: 5,
         paddingLeft: 9,
         paddingRight: 11,
       }}

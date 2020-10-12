@@ -1,14 +1,15 @@
 import React, { ReactNode, useState } from 'react';
-import { Text, View, ViewStyle } from 'react-native';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { Platform, Text, View, ViewStyle } from 'react-native';
+import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 import ActionBarView from './ActionBarView';
 import { useSubject } from '../lib/useSubject';
 import { decrementSlices, incrementSlices } from '../lib/CropSettings';
 import { numberOfSlices$ } from '../lib/CropSettings';
 import Control from './Control';
-import ReselectPano from './ReselectPano';
+import PanoBack from './PanoBack';
 import PlusMinusControl from './PlusMinusControl';
 import TrimControl from './TrimControl';
+import PanoExpand from './PanoExpand';
 
 enum EditorState {
   Slice,
@@ -16,7 +17,7 @@ enum EditorState {
 }
 
 export default function SliceBar() {
-  const [editorState, setEditorState] = useState(EditorState.Trim);
+  const [editorState, setEditorState] = useState(EditorState.Slice);
   return (
     <ActionBarView>
       {(() => {
@@ -27,8 +28,8 @@ export default function SliceBar() {
             return <TrimControl />;
         }
       })()}
-      <BottomBar>
-        <ReselectPano />
+      <NavBar>
+        {Platform.OS === 'web' ? <PanoBack /> : <PanoExpand />}
         <View style={{ flexDirection: 'row' }}>
           <TrimToggle
             disabled={editorState == EditorState.Trim}
@@ -60,31 +61,35 @@ export default function SliceBar() {
             }}
           />
         </View>
-        <ExportControl />
-      </BottomBar>
+        {Platform.OS === 'ios' ? <PanoBack /> : null}
+      </NavBar>
     </ActionBarView>
   );
 }
 
-function ExportControl() {
+function NextButton() {
   return (
-    <Control
-      touchableStyle={{
-        ...ToggleControlStyle,
-      }}
-    >
-      <MaterialCommunityIcons name="share" size={20} color="#fff" />
-      <Text
-        style={{
-          fontSize: 12,
-          fontWeight: '700',
-          color: '#fff',
-          marginLeft: 10,
+    <View style={{ alignItems: 'center', marginBottom: 35 }}>
+      <Control
+        touchableStyle={{
+          ...ToggleControlStyle,
+          paddingVertical: 10,
+          paddingHorizontal: 15,
         }}
       >
-        EXPORT
-      </Text>
-    </Control>
+        <MaterialIcons name="photo-camera" size={20} color="#fff" />
+        <Text
+          style={{
+            color: 'yellow',
+            fontSize: 12,
+            fontWeight: '700',
+            marginLeft: 10,
+          }}
+        >
+          SAVE PHOTOS
+        </Text>
+      </Control>
+    </View>
   );
 }
 
@@ -93,6 +98,7 @@ const SlicesManipulator = () => {
 
   return (
     <View style={{ marginBottom: 40 }} pointerEvents="box-none">
+      <NextButton />
       <PlusMinusControl
         currentValue={slices}
         disableDecrement={slices <= 2}
@@ -103,14 +109,13 @@ const SlicesManipulator = () => {
   );
 };
 
-const BottomBar = ({ children }: { children: ReactNode }) => {
+const NavBar = ({ children }: { children: ReactNode }) => {
   return (
     <View
       style={{
         flexDirection: 'row',
-        justifyContent: 'space-between',
-        paddingBottom: 20,
-        paddingHorizontal: 20,
+        justifyContent: 'space-evenly',
+        marginBottom: 20,
       }}
     >
       {children}
@@ -127,8 +132,8 @@ interface IToggleProps {
 const ToggleControlStyle: ViewStyle = {
   flexDirection: 'row',
   alignItems: 'center',
-  paddingVertical: 8,
-  paddingHorizontal: 12,
+  paddingVertical: 4,
+  paddingHorizontal: 10,
 };
 
 const SliceToggle = ({ onToggle, controlStyle, disabled }: IToggleProps) => {
@@ -149,7 +154,7 @@ const SliceToggle = ({ onToggle, controlStyle, disabled }: IToggleProps) => {
           fontSize: 12,
           fontWeight: '700',
           color: '#fff',
-          marginLeft: 10,
+          marginLeft: 8,
         }}
       >
         SLICE
@@ -171,10 +176,10 @@ const TrimToggle = ({ onToggle, controlStyle, disabled }: IToggleProps) => {
           fontSize: 12,
           fontWeight: '700',
           color: '#fff',
-          marginLeft: 10,
+          marginLeft: 8,
         }}
       >
-        TRIM
+        CROP
       </Text>
     </Control>
   );

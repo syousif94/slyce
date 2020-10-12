@@ -5,6 +5,7 @@ import { getAssetInfo, useAssetInfoAddress } from '../lib/PanoAlbum';
 import { selectImage } from '../lib/SelectedImage';
 import SharedElement from 'react-navigation-shared-element/build/SharedElement';
 import { useNavigation } from '@react-navigation/native';
+import { resetCropSettings } from '../lib/CropSettings';
 
 interface IPanoItem {
   item: MediaLibrary.Asset;
@@ -22,7 +23,8 @@ export default function PanoItem({ item: asset, index, window }: IPanoItem) {
       style={{ height: height, overflow: 'hidden' }}
       onPress={() => {
         selectImage(asset);
-        navigation.navigate('Splitter', { id: asset.id });
+        resetCropSettings();
+        navigation.navigate('Editor - Slyce', { id: asset.id });
       }}
     >
       <SharedElement id={asset.id}>

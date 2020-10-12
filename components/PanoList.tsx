@@ -43,7 +43,7 @@ export default function PanoList() {
               Panoramas
             </Text>
             <Text style={{ fontSize: 14, color: '#ccc' }}>
-              Select a panorama to slice and export
+              Select to split into equal slyces
             </Text>
           </View>
         )}

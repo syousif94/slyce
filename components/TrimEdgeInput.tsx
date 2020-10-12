@@ -36,8 +36,22 @@ export interface IEdgeInputProps {
 export default function EdgeInput(props: IEdgeInputProps) {
   const { edge } = props;
 
-  const firstIcon = 'chevron-left';
-  const secondIcon = 'chevron-right';
+  let firstIcon = 'chevron-left';
+  let secondIcon = 'chevron-right';
+
+  switch (edge) {
+    case Edge.Top:
+      firstIcon = 'chevron-up';
+      secondIcon = 'chevron-down';
+      break;
+    case Edge.Bottom:
+      firstIcon = 'chevron-down';
+      secondIcon = 'chevron-up';
+      break;
+    default:
+      break;
+  }
+
   const flexDirection: FlexStyle['flexDirection'] = 'row';
 
   const onArrowButton = (addBy: number) => () => {
@@ -52,6 +66,17 @@ export default function EdgeInput(props: IEdgeInputProps) {
     }
   };
 
+  let leftArrowValue = -1;
+  let rightArrowValue = 1;
+  let leftDisabled = props.value <= 0;
+  let rightDisabled = props.value >= 99;
+  if (edge === Edge.Right) {
+    leftArrowValue = 1;
+    rightArrowValue = -1;
+    leftDisabled = props.value >= 99;
+    rightDisabled = props.value <= 0;
+  }
+
   return (
     <View
       style={{
@@ -59,13 +84,27 @@ export default function EdgeInput(props: IEdgeInputProps) {
         alignItems: 'center',
       }}
     >
-      <ArrowButton onPress={onArrowButton(-1)}>
-        <MaterialCommunityIcons name={firstIcon} size={28} color="#fff" />
+      <ArrowButton
+        onPress={onArrowButton(leftArrowValue)}
+        disabled={leftDisabled}
+      >
+        <MaterialCommunityIcons
+          name={firstIcon}
+          size={28}
+          color={leftDisabled ? '#222' : 'rgba(255, 27, 150, 0.8)'}
+        />
       </ArrowButton>
 
       <EdgeTextInput {...props} />
-      <ArrowButton onPress={onArrowButton(1)}>
-        <MaterialCommunityIcons name={secondIcon} size={28} color="#fff" />
+      <ArrowButton
+        onPress={onArrowButton(rightArrowValue)}
+        disabled={rightDisabled}
+      >
+        <MaterialCommunityIcons
+          name={secondIcon}
+          size={28}
+          color={rightDisabled ? '#222' : 'rgba(255, 27, 150, 0.8)'}
+        />
       </ArrowButton>
     </View>
   );
@@ -74,11 +113,13 @@ export default function EdgeInput(props: IEdgeInputProps) {
 interface IArrowButtonProps {
   children: ReactNode;
   onPress: () => void;
+  disabled?: boolean;
 }
 
-function ArrowButton({ children, onPress }: IArrowButtonProps) {
+function ArrowButton({ children, onPress, disabled }: IArrowButtonProps) {
   return (
     <TouchableOpacity
+      disabled={disabled}
       onPress={onPress}
       style={{
         paddingHorizontal: 8,

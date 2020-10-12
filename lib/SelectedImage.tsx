@@ -33,6 +33,8 @@ export async function openPicker() {
 
     if (!result.cancelled) {
       selectedImage$.next(result);
+    } else {
+      selectedImage$.next(null);
     }
   } catch (E) {
     console.log(E);

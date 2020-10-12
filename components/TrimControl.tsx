@@ -1,13 +1,10 @@
-import React, { useRef, useState } from 'react';
+import React from 'react';
 import {
   View,
-  Text,
   NativeSyntheticEvent,
   TextInputChangeEventData,
-  StyleSheet,
-  TextInput,
   KeyboardAvoidingView,
-  FlexStyle,
+  Platform,
 } from 'react-native';
 import { useSubject } from '../lib/useSubject';
 import {
@@ -37,12 +34,16 @@ export default function TrimControl() {
   };
 
   return (
-    <KeyboardAvoidingView behavior="padding" pointerEvents="box-none">
+    <KeyboardAvoidingView
+      behavior="padding"
+      pointerEvents="box-none"
+      enabled={Platform.OS === 'ios'}
+    >
       <View
         style={{
           alignItems: 'center',
           justifyContent: 'center',
-          paddingBottom: 30,
+          paddingBottom: 35,
         }}
         pointerEvents="box-none"
       >

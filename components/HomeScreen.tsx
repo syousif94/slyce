@@ -1,15 +1,24 @@
 import { useNavigation } from '@react-navigation/native';
 import React from 'react';
-import { Image, Platform, Text, TouchableOpacity, View } from 'react-native';
-import { openPicker } from '../lib/SelectedImage';
+import {
+  Image,
+  Platform,
+  Text,
+  TouchableOpacity,
+  useWindowDimensions,
+  View,
+} from 'react-native';
+import { openPicker, selectedImage$ } from '../lib/SelectedImage';
 import Control from './Control';
 import PanoList from './PanoList';
+import { resetCropSettings } from '../lib/CropSettings';
 
 export default function HomeScreen() {
   if (Platform.OS === 'ios') {
     return <PanoList />;
   }
 
+  const window = useWindowDimensions();
   const navigation = useNavigation();
 
   return (
@@ -30,7 +39,7 @@ export default function HomeScreen() {
           color: '#fff',
           fontWeight: '500',
           marginTop: -10,
-          marginBottom: 20,
+          marginBottom: 30,
           marginHorizontal: 50,
           lineHeight: 20,
           textAlign: 'center',
@@ -42,7 +51,10 @@ export default function HomeScreen() {
       <Control
         onPress={async () => {
           await openPicker();
-          navigation.navigate('Splitter', { id: '' });
+          if (selectedImage$.value) {
+            resetCropSettings();
+            navigation.navigate('Editor - Slyce', { id: '' });
+          }
         }}
         touchableStyle={{
           paddingVertical: 12,
@@ -54,7 +66,13 @@ export default function HomeScreen() {
         </Text>
       </Control>
 
-      <View style={{ flex: 1, justifyContent: 'flex-end', paddingTop: 100 }}>
+      <View
+        style={{
+          flex: 1,
+          justifyContent: 'flex-end',
+          paddingTop: Platform.OS === 'web' ? window.height * 0.15 : 0,
+        }}
+      >
         <WebFooter />
       </View>
     </View>

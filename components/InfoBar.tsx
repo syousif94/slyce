@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, useWindowDimensions } from 'react-native';
 import {
   numberOfSlices$,
   getRatio,
@@ -10,8 +10,11 @@ import {
 } from '../lib/CropSettings';
 import { useSubject } from '../lib/useSubject';
 import { selectedImage$ } from '../lib/SelectedImage';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export default function InfoBar() {
+  const window = useWindowDimensions();
+  const insets = useSafeAreaInsets();
   const selectedImage = useSubject(selectedImage$);
 
   const topOffset = useSubject(topOffset$);
@@ -34,14 +37,14 @@ export default function InfoBar() {
     <View
       style={{
         position: 'absolute',
-        top: 60,
+        top: window.height * 0.04 + insets.top,
         alignSelf: 'center',
         alignItems: 'center',
       }}
       pointerEvents="none"
     >
       {/* height and width box */}
-      <View style={{ flexDirection: 'row', marginBottom: 10 }}>
+      <View style={{ flexDirection: 'row', marginBottom: 12 }}>
         {/* width box */}
         <View
           style={{
@@ -50,7 +53,7 @@ export default function InfoBar() {
             paddingHorizontal: 10,
             paddingVertical: 8,
             flexDirection: 'row',
-            marginRight: 5,
+            marginRight: 6,
           }}
         >
           <Text
@@ -86,7 +89,7 @@ export default function InfoBar() {
             paddingHorizontal: 10,
             paddingVertical: 8,
             flexDirection: 'row',
-            marginLeft: 5,
+            marginLeft: 6,
           }}
         >
           <Text
