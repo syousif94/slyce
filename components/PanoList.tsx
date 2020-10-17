@@ -20,13 +20,6 @@ export default function PanoList() {
     initializeAlbum();
   }, []);
 
-  const onViewableItemsChanged = useCallback(
-    (info: { viewableItems: ViewToken[]; changed: ViewToken[] }) => {
-      console.log(info.viewableItems);
-    },
-    []
-  );
-
   return (
     <View style={{ flex: 1, backgroundColor: '#000' }}>
       <FlatList
@@ -54,7 +47,6 @@ export default function PanoList() {
           return <PanoItem window={window} {...data} />;
         }}
         viewabilityConfig={PanoList.viewabilityConfig}
-        onViewableItemsChanged={onViewableItemsChanged}
       />
     </View>
   );

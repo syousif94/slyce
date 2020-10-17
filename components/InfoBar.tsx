@@ -11,6 +11,7 @@ import {
 import { useSubject } from '../lib/useSubject';
 import { selectedImage$ } from '../lib/SelectedImage';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { CONTROL_BG } from './Control';
 
 export default function InfoBar() {
   const window = useWindowDimensions();
@@ -48,7 +49,7 @@ export default function InfoBar() {
         {/* width box */}
         <View
           style={{
-            backgroundColor: 'rgba(255,255,255,0.1)',
+            backgroundColor: CONTROL_BG,
             borderRadius: 10,
             paddingHorizontal: 10,
             paddingVertical: 8,
@@ -84,7 +85,7 @@ export default function InfoBar() {
         {/* height box */}
         <View
           style={{
-            backgroundColor: 'rgba(255,255,255,0.1)',
+            backgroundColor: CONTROL_BG,
             borderRadius: 10,
             paddingHorizontal: 10,
             paddingVertical: 8,
@@ -118,7 +119,7 @@ export default function InfoBar() {
       {/* ratio box */}
       <View
         style={{
-          backgroundColor: 'rgba(255,255,255,0.1)',
+          backgroundColor: CONTROL_BG,
           borderRadius: 10,
           paddingHorizontal: 10,
           paddingVertical: 8,

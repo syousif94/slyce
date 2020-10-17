@@ -2,7 +2,7 @@
   "expo": {
     "name": "Slyce",
     "slug": "slyce",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -11,20 +11,23 @@
       "backgroundColor": "#000000"
     },
     "updates": {
-      "fallbackToCacheTimeout": 0
+      "fallbackToCacheTimeout": 0,
+      "checkAutomatically": "ON_ERROR_RECOVERY"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "me.syousif.slyce"
+      "bundleIdentifier": "me.syousif.slyce",
+      "infoPlist": {
+        "LSApplicationQueriesSchemes": ["instagram"]
+      }
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
     "android": {
-      "package": "me.syousif.slyce"
+      "package": "me.syousif.slyce",
+      "versionCode": 1
     }
   }
 }

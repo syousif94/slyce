@@ -9,7 +9,9 @@ export interface IImageSource {
   uri: string;
 }
 
-export const selectedImage$ = new BehaviorSubject<IImageSource | null>(null);
+type ImageAsset = IImageSource | null;
+
+export const selectedImage$ = new BehaviorSubject<ImageAsset>(null);
 
 export async function getLibraryPermissions() {
   if (Platform.OS !== 'web') {
@@ -20,7 +22,7 @@ export async function getLibraryPermissions() {
   }
 }
 
-export async function selectImage(asset: IImageSource | null) {
+export async function selectImage(asset: ImageAsset) {
   selectedImage$.next(asset);
 }
 

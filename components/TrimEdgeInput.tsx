@@ -17,6 +17,7 @@ import {
   leftOffset$,
   rightOffset$,
 } from '../lib/CropSettings';
+import { CONTROL_BG, CONTROL_DISABLED_FILL } from './Control';
 
 export enum Edge {
   Top,
@@ -91,7 +92,9 @@ export default function EdgeInput(props: IEdgeInputProps) {
         <MaterialCommunityIcons
           name={firstIcon}
           size={28}
-          color={leftDisabled ? '#222' : 'rgba(255, 27, 150, 0.8)'}
+          color={
+            leftDisabled ? CONTROL_DISABLED_FILL : 'rgba(255, 27, 150, 0.8)'
+          }
         />
       </ArrowButton>
 
@@ -103,7 +106,9 @@ export default function EdgeInput(props: IEdgeInputProps) {
         <MaterialCommunityIcons
           name={secondIcon}
           size={28}
-          color={rightDisabled ? '#222' : 'rgba(255, 27, 150, 0.8)'}
+          color={
+            rightDisabled ? CONTROL_DISABLED_FILL : 'rgba(255, 27, 150, 0.8)'
+          }
         />
       </ArrowButton>
     </View>
@@ -138,9 +143,7 @@ function EdgeTextInput({ value, onChange, edge }: IEdgeInputProps) {
   return (
     <View
       style={{
-        backgroundColor: selected
-          ? 'rgba(255,255,255,0.25)'
-          : 'rgba(255,255,255,0.1)',
+        backgroundColor: selected ? 'rgba(255,255,255,0.25)' : CONTROL_BG,
         borderRadius: 5,
       }}
     >

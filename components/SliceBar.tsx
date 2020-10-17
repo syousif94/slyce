@@ -5,11 +5,13 @@ import ActionBarView from './ActionBarView';
 import { useSubject } from '../lib/useSubject';
 import { decrementSlices, incrementSlices } from '../lib/CropSettings';
 import { numberOfSlices$ } from '../lib/CropSettings';
-import Control from './Control';
+import Control, { CONTROL_BG } from './Control';
 import PanoBack from './PanoBack';
 import PlusMinusControl from './PlusMinusControl';
 import TrimControl from './TrimControl';
 import PanoExpand from './PanoExpand';
+import sliceImage from '../lib/SliceImage';
+import { CONTROL_SELECTED_BG } from './Control';
 
 enum EditorState {
   Slice,
@@ -30,7 +32,7 @@ export default function SliceBar() {
       })()}
       <NavBar>
         {Platform.OS === 'web' ? <PanoBack /> : <PanoExpand />}
-        <View style={{ flexDirection: 'row' }}>
+        <View style={{ flexDirection: 'row' }} pointerEvents="box-none">
           <TrimToggle
             disabled={editorState == EditorState.Trim}
             onToggle={() => {
@@ -42,8 +44,8 @@ export default function SliceBar() {
               marginRight: 3,
               backgroundColor:
                 editorState == EditorState.Trim
-                  ? 'rgba(255,255,255,0.25)'
-                  : 'rgba(255,255,255,0.1)',
+                  ? CONTROL_SELECTED_BG
+                  : CONTROL_BG,
             }}
           />
           <SliceToggle
@@ -56,8 +58,8 @@ export default function SliceBar() {
               borderBottomLeftRadius: 0,
               backgroundColor:
                 editorState == EditorState.Slice
-                  ? 'rgba(255,255,255,0.25)'
-                  : 'rgba(255,255,255,0.1)',
+                  ? CONTROL_SELECTED_BG
+                  : CONTROL_BG,
             }}
           />
         </View>
@@ -75,6 +77,9 @@ function NextButton() {
           ...ToggleControlStyle,
           paddingVertical: 10,
           paddingHorizontal: 15,
+        }}
+        onPress={() => {
+          sliceImage();
         }}
       >
         <MaterialIcons name="photo-camera" size={20} color="#fff" />
@@ -117,6 +122,7 @@ const NavBar = ({ children }: { children: ReactNode }) => {
         justifyContent: 'space-evenly',
         marginBottom: 20,
       }}
+      pointerEvents="box-none"
     >
       {children}
     </View>

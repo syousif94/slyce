@@ -2,6 +2,7 @@ import React from 'react';
 import { ViewStyle, View, Text } from 'react-native';
 import Control from './Control';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { CONTROL_DISABLED_FILL } from './Control';
 
 const PlusMinusControlTouchableStyle: ViewStyle = {
   flexDirection: 'row',
@@ -43,7 +44,7 @@ export default function PlusMinusControl({
         <MaterialCommunityIcons
           name="minus"
           size={28}
-          color={disableDecrement ? '#555' : '#fff'}
+          color={disableDecrement ? CONTROL_DISABLED_FILL : '#fff'}
         />
       </Control>
       {/* text */}

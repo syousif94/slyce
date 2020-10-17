@@ -17,6 +17,7 @@ import InfoBar from './InfoBar';
 import CropBox from './CropBox';
 import { previewMode$, PreviewMode } from '../lib/PreviewModes';
 import ImagePreview from './ImagePreview';
+import SliceProgress from './SliceProgress';
 
 export default function ImageEditor({
   route,
@@ -36,6 +37,7 @@ export default function ImageEditor({
       </KeyboardAvoidingView>
       <SliceBar />
       <InfoBar />
+      <SliceProgress />
     </View>
   );
 }

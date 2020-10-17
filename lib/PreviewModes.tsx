@@ -6,6 +6,4 @@ export enum PreviewMode {
   Slices,
 }
 
-export const previewMode$ = new BehaviorSubject(
-  Platform.OS === 'web' ? PreviewMode.Full : PreviewMode.Slices
-);
+export const previewMode$ = new BehaviorSubject(PreviewMode.Full);

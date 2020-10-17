@@ -2,13 +2,14 @@ import React from 'react';
 import { TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Feather } from '@expo/vector-icons';
+import { CONTROL_BG } from './Control';
 
 export default function PanoBack() {
   const navigation = useNavigation();
   return (
     <TouchableOpacity
       style={{
-        backgroundColor: 'rgba(255,255,255,0.1)',
+        backgroundColor: CONTROL_BG,
         borderRadius: 10,
         flexDirection: 'row',
         alignItems: 'center',

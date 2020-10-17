@@ -12,7 +12,7 @@ export function useSubject<T>(subject: BehaviorSubject<T>): T {
     return () => {
       sub.unsubscribe();
     };
-  }, []);
+  }, [subject]);
 
   return state;
 }

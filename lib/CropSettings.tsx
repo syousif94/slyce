@@ -1,8 +1,6 @@
 import { BehaviorSubject } from 'rxjs';
-import { selectedImage$, IImageSource } from './SelectedImage';
-import * as ImageManipulator from 'expo-image-manipulator';
+import { IImageSource } from './SelectedImage';
 import { Alert, Platform } from 'react-native';
-import * as MediaLibrary from 'expo-media-library';
 import { PreviewMode, previewMode$ } from './PreviewModes';
 
 export const numberOfSlices$ = new BehaviorSubject(2);
@@ -17,9 +15,7 @@ export function resetCropSettings() {
   bottomOffset$.next(0);
   leftOffset$.next(0);
   rightOffset$.next(0);
-  previewMode$.next(
-    Platform.OS === 'web' ? PreviewMode.Full : PreviewMode.Slices
-  );
+  previewMode$.next(PreviewMode.Full);
 }
 
 export function getRatio(
@@ -55,51 +51,4 @@ export function decrementSlices() {
   }
 
   numberOfSlices$.next(currentValue - 1);
-}
-
-export async function sliceImage() {
-  const selectedImage = selectedImage$.value;
-
-  if (!selectedImage) {
-    return;
-  }
-
-  const sliceCount = numberOfSlices$.value;
-
-  const sliceWidth = Math.floor(selectedImage.width / sliceCount);
-
-  const slicePromises: Promise<ImageManipulator.ImageResult>[] = [];
-
-  for (let i = 0; i < sliceCount; i++) {
-    slicePromises.push(
-      ImageManipulator.manipulateAsync(
-        selectedImage.uri,
-        [
-          {
-            crop: {
-              originX: sliceWidth * i,
-              originY: 0,
-              width: sliceWidth,
-              height: selectedImage.height,
-            },
-          },
-        ],
-        { compress: 1, format: ImageManipulator.SaveFormat.JPEG }
-      )
-    );
-  }
-
-  try {
-    const crops = await Promise.all(slicePromises);
-
-    const savePromises = crops.map((crop) =>
-      MediaLibrary.saveToLibraryAsync(crop.uri)
-    );
-
-    await Promise.all(savePromises);
-
-    Alert.alert('Success!');
-  } catch (err) {
-    Alert.alert(err.message);
-  }
 }

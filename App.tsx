@@ -9,6 +9,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import createSharedElementStackNavigator from 'react-navigation-shared-element/build/createSharedElementStackNavigator';
 import HomeScreen from './components/HomeScreen';
 import ImagePreview from './components/ImagePreview';
+import Updater from './components/Updater';
 
 enableScreens();
 
@@ -47,6 +48,7 @@ export default function App() {
             <Modal.Screen component={ImagePreview} name="Preview" />
           </Modal.Navigator>
         </NavigationContainer>
+        <Updater />
         <StatusBar style="light" />
       </View>
     </SafeAreaProvider>

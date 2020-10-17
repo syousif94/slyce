@@ -3,6 +3,7 @@ import { TouchableOpacity } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useSubject } from '../lib/useSubject';
 import { previewMode$, PreviewMode } from '../lib/PreviewModes';
+import { CONTROL_SELECTED_BG, CONTROL_BG } from './Control';
 
 export default function PanoExpand() {
   const previewMode = useSubject(previewMode$);
@@ -26,7 +27,7 @@ export default function PanoExpand() {
     <TouchableOpacity
       onPress={onPress}
       style={{
-        backgroundColor: `rgba(255,255,255,${inSlices ? '0.25' : '0.1'})`,
+        backgroundColor: inSlices ? CONTROL_SELECTED_BG : CONTROL_BG,
         borderRadius: 10,
         flexDirection: 'row',
         alignItems: 'center',

@@ -12,6 +12,10 @@ export interface IControlProps {
   disabled?: boolean;
 }
 
+export const CONTROL_BG = 'rgba(48,48,48,0.45)';
+export const CONTROL_SELECTED_BG = 'rgba(130,130,130,0.45)';
+export const CONTROL_DISABLED_FILL = 'rgba(140,140,140,0.8)';
+
 export default function Control({
   touchableStyle,
   onPress,
@@ -22,7 +26,7 @@ export default function Control({
     <TouchableOpacity
       style={[
         {
-          backgroundColor: 'rgba(255,255,255,0.1)',
+          backgroundColor: CONTROL_BG,
           borderRadius: 10,
         },
         touchableStyle,
