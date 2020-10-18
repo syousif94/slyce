@@ -1,11 +1,11 @@
 {
   "files": {
-    "app.js": "/slyce/static/js/app.f1e21a0c.chunk.js",
-    "app.js.map": "/slyce/static/js/app.f1e21a0c.chunk.js.map",
+    "app.js": "/slyce/static/js/app.3ccee1c3.chunk.js",
+    "app.js.map": "/slyce/static/js/app.3ccee1c3.chunk.js.map",
     "runtime~app.js": "/slyce/static/js/runtime~app.0a30a8ce.js",
     "runtime~app.js.map": "/slyce/static/js/runtime~app.0a30a8ce.js.map",
-    "static/js/2.538ae71b.chunk.js": "/slyce/static/js/2.538ae71b.chunk.js",
-    "static/js/2.538ae71b.chunk.js.map": "/slyce/static/js/2.538ae71b.chunk.js.map",
+    "static/js/2.abd0f512.chunk.js": "/slyce/static/js/2.abd0f512.chunk.js",
+    "static/js/2.abd0f512.chunk.js.map": "/slyce/static/js/2.abd0f512.chunk.js.map",
     "fonts/AntDesign.ttf": "/slyce/./fonts/AntDesign.ttf",
     "fonts/Entypo.ttf": "/slyce/./fonts/Entypo.ttf",
     "fonts/Feather.ttf": "/slyce/./fonts/Feather.ttf",
@@ -24,12 +24,12 @@
     "index.html": "/slyce/index.html",
     "manifest.json": "/slyce/manifest.json",
     "serve.json": "/slyce/serve.json",
-    "static/js/2.538ae71b.chunk.js.LICENSE.txt": "/slyce/static/js/2.538ae71b.chunk.js.LICENSE.txt",
+    "static/js/2.abd0f512.chunk.js.LICENSE.txt": "/slyce/static/js/2.abd0f512.chunk.js.LICENSE.txt",
     "static/media/splash.png": "/slyce/static/media/splash.149243aa.png"
   },
   "entrypoints": [
     "static/js/runtime~app.0a30a8ce.js",
-    "static/js/2.538ae71b.chunk.js",
-    "static/js/app.f1e21a0c.chunk.js"
+    "static/js/2.abd0f512.chunk.js",
+    "static/js/app.3ccee1c3.chunk.js"
   ]
 }
