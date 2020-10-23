@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Text, View, TouchableOpacity } from 'react-native';
-import { slyce$, downloadImage } from '../lib/SliceImage';
+import { Text, View, TouchableOpacity, ScrollView } from 'react-native';
+import { slyce$, downloadImage, clearImage } from '../lib/SliceImage';
 import { useSubject } from '../lib/useSubject';
 import { IImageSource } from '../lib/SelectedImage';
+import Control from './Control';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 export default function SliceProgress() {
   const [images, setImages] = useState<IImageSource[]>([]);
@@ -25,8 +27,6 @@ export default function SliceProgress() {
     return null;
   }
 
-  console.log(images);
-
   return (
     <View
       style={{
@@ -40,7 +40,7 @@ export default function SliceProgress() {
         alignItems: 'center',
       }}
     >
-      <View style={{ alignItems: 'center' }}>
+      <View style={{ alignItems: 'center', maxWidth: '100%' }}>
         <Text
           style={{
             color: '#fff',
@@ -51,42 +51,82 @@ export default function SliceProgress() {
         >
           {!images.length ? 'Slicing' : 'Slyced'}
         </Text>
-        <Text style={{ color: '#fff', fontSize: 12, marginBottom: 20 }}>
+        <Text
+          style={{
+            color: '#fff',
+            fontSize: 12,
+            marginBottom: 20,
+            textAlign: 'center',
+            marginHorizontal: 25,
+            maxWidth: 500,
+          }}
+        >
           {!images.length
             ? 'Wait a few seconds... Apps do this a bit faster.'
-            : 'Click or tap to download each slyce. May take a few seconds for the download to start.'}
+            : 'Click or tap to download each slyce. May take a few seconds for the download to start. Might not work on certain versions of iOS. Use the the app instead.'}
         </Text>
-        <View style={{ flexDirection: 'row', height: 130 }}>
-          {images.map((image, i) => {
-            return (
-              <TouchableOpacity
-                key={`${i}`}
-                style={{
-                  height: 130,
-                  width: (image.width * 150) / image.height,
-                  overflow: 'hidden',
-                  marginHorizontal: 5,
-                }}
-                onPress={() => {
-                  setTimeout(() => {
-                    downloadImage((image as any).base64, `slyce-${i + 1}.jpg`);
-                  }, 500);
-                }}
-              >
-                <img
+        <ScrollView
+          horizontal
+          style={{ height: 130, maxWidth: '100%' }}
+          centerContent
+        >
+          <View style={{ flexDirection: 'row', height: 130 }}>
+            {images.map((image, i) => {
+              return (
+                <TouchableOpacity
+                  key={`${i}`}
                   style={{
                     height: 130,
                     width: (image.width * 150) / image.height,
-                    flex: '0 0 auto',
-                    cursor: 'pointer',
+                    overflow: 'hidden',
+                    marginHorizontal: 5,
                   }}
-                  src={(image as any).base64}
-                />
-              </TouchableOpacity>
-            );
-          })}
-        </View>
+                  onPress={() => {
+                    setTimeout(() => {
+                      downloadImage(
+                        (image as any).base64,
+                        `slyce-${i + 1}.jpg`
+                      );
+                    }, 500);
+                  }}
+                >
+                  <img
+                    style={{
+                      height: 130,
+                      width: (image.width * 150) / image.height,
+                      flex: '0 0 auto',
+                      cursor: 'pointer',
+                    }}
+                    src={(image as any).base64}
+                  />
+                </TouchableOpacity>
+              );
+            })}
+          </View>
+        </ScrollView>
       </View>
+      <DismissControl />
     </View>
+  );
+}
+
+function DismissControl() {
+  return (
+    <Control
+      touchableStyle={{
+        position: 'absolute',
+        top: 20,
+        right: 20,
+        height: 44,
+        width: 44,
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}
+      onPress={() => {
+        clearImage();
+      }}
+    >
+      <MaterialCommunityIcons name="close" size={24} color="#fff" />
+    </Control>
   );
 }

@@ -113,39 +113,49 @@ async function getLibraryPermissions() {
   }
 }
 
+async function loadAllAssets() {
+  let panos: MediaLibrary.Asset[] = [];
+
+  let album;
+
+  if (Platform.OS === 'android') {
+    const albums = await MediaLibrary.getAlbumsAsync();
+
+    const album = albums.find((album) => album.title === 'Camera');
+
+    if (!album) {
+      return;
+    }
+  }
+
+  let currentRequest = await loadPhotos({ total: 20, album });
+
+  panos = panos.concat(filterPanos(currentRequest.assets));
+
+  while (currentRequest.hasNextPage) {
+    currentRequest = await loadPhotos({
+      total: 20,
+      after: currentRequest.endCursor,
+      album,
+    });
+
+    panos = panos.concat(filterPanos(currentRequest.assets));
+  }
+
+  album$.next(panos);
+}
+
 export async function initializeAlbum() {
   try {
     await getLibraryPermissions();
 
-    let panos: MediaLibrary.Asset[] = [];
+    await loadAllAssets();
 
-    let album;
-
-    if (Platform.OS === 'android') {
-      const albums = await MediaLibrary.getAlbumsAsync();
-
-      const album = albums.find((album) => album.title === 'Camera');
-
-      if (!album) {
-        return;
-      }
-    }
-
-    let currentRequest = await loadPhotos({ total: 20, album });
-
-    panos = panos.concat(filterPanos(currentRequest.assets));
-
-    while (currentRequest.hasNextPage) {
-      currentRequest = await loadPhotos({
-        total: 20,
-        after: currentRequest.endCursor,
-        album,
+    MediaLibrary.addListener((event) => {
+      loadAllAssets().catch((err) => {
+        console.log(err.stack);
       });
-
-      panos = panos.concat(filterPanos(currentRequest.assets));
-    }
-
-    album$.next(panos);
+    });
   } catch (error) {
     Alert.alert('Error', error.message);
   }

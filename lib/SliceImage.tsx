@@ -72,7 +72,15 @@ export default async function sliceImage() {
 
   const sliceCount = numberOfSlices$.value;
 
-  const sliceWidth = Math.floor(selectedImage.width / sliceCount);
+  const topMargin = Math.round((top / 100) * selectedImage.height);
+  const bottomMargin = Math.round((bottom / 100) * selectedImage.height);
+  const adjustedHeight = selectedImage.height - topMargin - bottomMargin;
+
+  const leftMargin = Math.round((left / 100) * selectedImage.width);
+  const rightMargin = Math.round((right / 100) * selectedImage.width);
+  const adjustedWidth = selectedImage.width - leftMargin - rightMargin;
+
+  const sliceWidth = Math.floor(adjustedWidth / sliceCount);
 
   const isWeb = Platform.OS === 'web';
 
@@ -80,7 +88,8 @@ export default async function sliceImage() {
 
   try {
     for (let i = 0; i < sliceCount; i++) {
-      const originX = sliceWidth * i;
+      const originX = leftMargin + sliceWidth * i;
+      const originY = topMargin;
 
       const manipulateAsync = isWeb
         ? ImageCanvas.default.manipulateAsync
@@ -92,9 +101,9 @@ export default async function sliceImage() {
           {
             crop: {
               originX,
-              originY: 0,
+              originY,
               width: sliceWidth,
-              height: selectedImage.height,
+              height: adjustedHeight,
             },
           },
         ],
