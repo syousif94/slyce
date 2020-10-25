@@ -23,16 +23,16 @@ export default function InfoBar() {
   const leftOffset = useSubject(leftOffset$);
   const rightOffset = useSubject(rightOffset$);
   const slices = useSubject(numberOfSlices$);
-  const ratio =
-    getRatio(
-      selectedImage!,
-      slices,
-      topOffset,
-      bottomOffset,
-      leftOffset,
-      rightOffset
-    ) * 9;
-  const lessThan16By9 = ratio > 16;
+  const ratio = getRatio(
+    selectedImage!,
+    slices,
+    topOffset,
+    bottomOffset,
+    leftOffset,
+    rightOffset
+  );
+
+  const invalidRatio = ratio > 1.91 || ratio < 0.8;
 
   return (
     <View
@@ -110,8 +110,10 @@ export default function InfoBar() {
               marginLeft: 10,
             }}
           >
-            {selectedImage!.height -
-              ((topOffset + bottomOffset) / 100) * selectedImage!.height}
+            {Math.round(
+              selectedImage!.height -
+                ((topOffset + bottomOffset) / 100) * selectedImage!.height
+            )}
             px
           </Text>
         </View>
@@ -139,13 +141,27 @@ export default function InfoBar() {
           style={{
             fontSize: 12,
             fontWeight: '700',
-            color: lessThan16By9 ? 'red' : 'yellow',
+            color: invalidRatio ? 'red' : 'yellow',
             marginLeft: 10,
           }}
         >
-          {ratio.toFixed(2)} : 9
+          {ratio.toFixed(2)} : 1
         </Text>
       </View>
+      {invalidRatio ? (
+        <Text
+          style={{
+            color: '#fff',
+            fontSize: 12,
+            fontWeight: '500',
+            marginTop: 13,
+            marginHorizontal: 20,
+            textAlign: 'center',
+          }}
+        >
+          Ratios between 1.91 and 0.8 are valid on social
+        </Text>
+      ) : null}
     </View>
   );
 }

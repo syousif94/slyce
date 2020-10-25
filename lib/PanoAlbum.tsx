@@ -2,7 +2,6 @@ import { BehaviorSubject } from 'rxjs';
 import * as MediaLibrary from 'expo-media-library';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import * as Location from 'expo-location';
 import { useEffect, useState } from 'react';
 import { Alert, Platform } from 'react-native';
 import { getAddress } from './Addresses';

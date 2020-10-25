@@ -2,7 +2,7 @@
   "expo": {
     "name": "Slyce",
     "slug": "slyce",
-    "version": "1.0.4",
+    "version": "1.0.5",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -19,7 +19,8 @@
       "supportsTablet": true,
       "bundleIdentifier": "me.syousif.slyce",
       "infoPlist": {
-        "LSApplicationQueriesSchemes": ["instagram"]
+        "LSApplicationQueriesSchemes": ["instagram"],
+        "NSPhotoLibraryUsageDescription": "Allow to select panoramas from your photos."
       }
     },
     "web": {

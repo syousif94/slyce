@@ -63,7 +63,7 @@ export default function SliceProgress() {
         >
           {!images.length
             ? 'Wait a few seconds... Apps do this a bit faster.'
-            : 'Click or tap to download each slyce. May take a few seconds for the download to start. Might not work on certain versions of iOS. Use the the app instead.'}
+            : 'Click or tap to download each slyce. May take a few seconds for the download to start. iOS may not handle full size images. Use the the app instead.'}
         </Text>
         <ScrollView
           horizontal
