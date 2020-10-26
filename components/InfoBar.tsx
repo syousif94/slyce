@@ -159,7 +159,7 @@ export default function InfoBar() {
             textAlign: 'center',
           }}
         >
-          Ratios between 1.91 and 0.8 are valid on social
+          Stay between 1.91 and 0.8 for social media
         </Text>
       ) : null}
     </View>

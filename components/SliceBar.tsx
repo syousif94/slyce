@@ -4,7 +4,14 @@ import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 import ActionBarView from './ActionBarView';
 import { useSubject } from '../lib/useSubject';
 import { decrementSlices, incrementSlices } from '../lib/CropSettings';
-import { numberOfSlices$ } from '../lib/CropSettings';
+import {
+  numberOfSlices$,
+  getRatio,
+  topOffset$,
+  bottomOffset$,
+  rightOffset$,
+  leftOffset$,
+} from '../lib/CropSettings';
 import Control, { CONTROL_BG } from './Control';
 import PanoBack from './PanoBack';
 import PlusMinusControl from './PlusMinusControl';
@@ -12,6 +19,7 @@ import TrimControl from './TrimControl';
 import PanoExpand from './PanoExpand';
 import sliceImage from '../lib/SliceImage';
 import { CONTROL_SELECTED_BG } from './Control';
+import { selectedImage$ } from '../lib/SelectedImage';
 
 enum EditorState {
   Slice,
@@ -70,6 +78,24 @@ export default function SliceBar() {
 }
 
 function NextButton() {
+  const selectedImage = useSubject(selectedImage$);
+
+  const topOffset = useSubject(topOffset$);
+  const bottomOffset = useSubject(bottomOffset$);
+  const leftOffset = useSubject(leftOffset$);
+  const rightOffset = useSubject(rightOffset$);
+  const slices = useSubject(numberOfSlices$);
+  const ratio = getRatio(
+    selectedImage!,
+    slices,
+    topOffset,
+    bottomOffset,
+    leftOffset,
+    rightOffset
+  );
+
+  const invalidRatio = ratio > 1.91 || ratio < 0.8;
+
   return (
     <View style={{ alignItems: 'center', marginBottom: 35 }}>
       <Control
@@ -85,7 +111,7 @@ function NextButton() {
         <MaterialIcons name="photo-camera" size={20} color="#fff" />
         <Text
           style={{
-            color: 'yellow',
+            color: invalidRatio ? 'red' : 'yellow',
             fontSize: 12,
             fontWeight: '700',
             marginLeft: 10,

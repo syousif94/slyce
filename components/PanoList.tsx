@@ -1,11 +1,5 @@
-import React, { useCallback, useEffect } from 'react';
-import {
-  View,
-  FlatList,
-  useWindowDimensions,
-  Text,
-  ViewToken,
-} from 'react-native';
+import React, { useEffect } from 'react';
+import { View, FlatList, useWindowDimensions, Text } from 'react-native';
 import { useSubject } from '../lib/useSubject';
 import { album$, initializeAlbum } from '../lib/PanoAlbum';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -35,9 +29,7 @@ export default function PanoList() {
             <Text style={{ fontSize: 30, color: '#fff', fontWeight: '700' }}>
               Panoramas
             </Text>
-            <Text style={{ fontSize: 14, color: '#ccc' }}>
-              Select to split into equal slyces
-            </Text>
+            <Text style={{ fontSize: 14, color: '#ccc' }}>Tap to slyce</Text>
           </View>
         )}
         contentInsetAdjustmentBehavior="never"
@@ -46,13 +38,7 @@ export default function PanoList() {
         renderItem={(data) => {
           return <PanoItem window={window} {...data} />;
         }}
-        viewabilityConfig={PanoList.viewabilityConfig}
       />
     </View>
   );
 }
-
-PanoList.viewabilityConfig = {
-  itemVisiblePercentThreshold: 0.1,
-  minimumViewTime: 250,
-};

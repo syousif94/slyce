@@ -44,26 +44,27 @@ export default function SliceProgress() {
         <Text
           style={{
             color: '#fff',
-            fontSize: 16,
+            fontSize: 20,
             fontWeight: '700',
             marginBottom: 10,
           }}
         >
-          {!images.length ? 'Slicing' : 'Slyced'}
+          {!images.length ? 'Slycing' : 'Slyced'}
         </Text>
         <Text
           style={{
             color: '#fff',
-            fontSize: 12,
+            fontSize: 16,
             marginBottom: 20,
             textAlign: 'center',
             marginHorizontal: 25,
             maxWidth: 500,
+            lineHeight: 22,
           }}
         >
           {!images.length
-            ? 'Wait a few seconds... Apps do this a bit faster.'
-            : 'Click or tap to download each slyce. May take a few seconds for the download to start. iOS may not handle full size images. Use the the app instead.'}
+            ? 'Wait a few seconds... Apps do this much faster.'
+            : 'Click or tap to download each slyce.\nMay take a few seconds for the download to start.'}
         </Text>
         <ScrollView
           horizontal

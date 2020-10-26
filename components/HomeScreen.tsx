@@ -1,17 +1,12 @@
 import { useNavigation } from '@react-navigation/native';
 import React from 'react';
-import {
-  Image,
-  Platform,
-  Text,
-  TouchableOpacity,
-  useWindowDimensions,
-  View,
-} from 'react-native';
+import { Image, Platform, Text, useWindowDimensions, View } from 'react-native';
 import { openPicker, selectedImage$ } from '../lib/SelectedImage';
 import Control from './Control';
 import PanoList from './PanoList';
 import { resetCropSettings } from '../lib/CropSettings';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import * as Linking from 'expo-linking';
 
 export default function HomeScreen() {
   if (Platform.OS === 'ios') {
@@ -29,6 +24,7 @@ export default function HomeScreen() {
         alignItems: 'center',
       }}
     >
+      <WebHeader />
       <View style={{ flex: 1 }} />
       <Image
         source={require('../assets/splash.png')}
@@ -38,10 +34,11 @@ export default function HomeScreen() {
         style={{
           color: '#fff',
           fontWeight: '500',
-          marginTop: -10,
-          marginBottom: 30,
+          marginTop: -15,
+          marginBottom: 20,
           marginHorizontal: 50,
-          lineHeight: 20,
+          fontSize: 17,
+          lineHeight: 27,
           textAlign: 'center',
           zIndex: 4,
         }}
@@ -50,6 +47,10 @@ export default function HomeScreen() {
       </Text>
       <Control
         onPress={async () => {
+          if (isiOSWeb()) {
+            alert('Switch to large under image size for the best results');
+          }
+
           await openPicker();
           if (selectedImage$.value) {
             resetCropSettings();
@@ -95,6 +96,11 @@ function WebFooter() {
             paddingVertical: 8,
             marginHorizontal: 5,
           }}
+          onPress={() => {
+            Linking.openURL(
+              'https://apps.apple.com/us/app/slyce-panoramas/id1533345426'
+            );
+          }}
         >
           <Text style={{ color: '#fff', fontSize: 13, fontWeight: '700' }}>
             iOS
@@ -106,6 +112,11 @@ function WebFooter() {
             paddingVertical: 8,
             marginHorizontal: 5,
           }}
+          onPress={() => {
+            Linking.openURL(
+              'https://play.google.com/store/apps/details?id=me.syousif.slyce'
+            );
+          }}
         >
           <Text style={{ color: '#fff', fontSize: 13, fontWeight: '700' }}>
             ANDROID
@@ -113,5 +124,54 @@ function WebFooter() {
         </Control>
       </View>
     </View>
+  );
+}
+
+function WebHeader() {
+  if (Platform.OS !== 'web') {
+    return null;
+  }
+
+  return (
+    <View
+      style={{
+        flexDirection: 'row',
+        justifyContent: 'flex-end',
+        width: '100%',
+        paddingTop: 10,
+        paddingRight: 10,
+      }}
+    >
+      <Control
+        touchableStyle={{
+          flexDirection: 'row',
+          paddingRight: 12,
+          paddingLeft: 6,
+          paddingVertical: 6,
+          alignItems: 'center',
+        }}
+        onPress={() => {
+          Linking.openURL('https://instagram.com/slyce.app');
+        }}
+      >
+        <MaterialCommunityIcons name="instagram" size={20} color="#fff" />
+        <Text
+          style={{
+            color: '#fff',
+            fontSize: 13,
+            fontWeight: '700',
+            marginLeft: 12,
+          }}
+        >
+          slyce.app
+        </Text>
+      </Control>
+    </View>
+  );
+}
+
+function isiOSWeb() {
+  return ['iPhone Simulator', 'iPod Simulator', 'iPhone', 'iPod'].includes(
+    navigator.platform
   );
 }
