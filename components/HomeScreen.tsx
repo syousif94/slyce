@@ -48,7 +48,9 @@ export default function HomeScreen() {
       <Control
         onPress={async () => {
           if (isiOSWeb()) {
-            alert('Switch to large under image size for the best results');
+            alert(
+              'Heads up: On iPhones, switch the selected image size to large for panoramas.'
+            );
           }
 
           await openPicker();
@@ -163,7 +165,32 @@ function WebHeader() {
             marginLeft: 12,
           }}
         >
-          slyce.app
+          @slyce.app
+        </Text>
+      </Control>
+      <Control
+        touchableStyle={{
+          flexDirection: 'row',
+          paddingRight: 12,
+          paddingLeft: 6,
+          paddingVertical: 6,
+          alignItems: 'center',
+        }}
+        onPress={() => {
+          Linking.openURL('https://instagram.com/slyce.app');
+        }}
+      >
+        {/* <MaterialCommunityIcons name="github-circle" size={20} color="#fff" /> */}
+        <MaterialCommunityIcons name="file-code" size={20} color="#fff" />
+        <Text
+          style={{
+            color: '#fff',
+            fontSize: 13,
+            fontWeight: '700',
+            marginLeft: 5,
+          }}
+        >
+          {'<github />'}
         </Text>
       </Control>
     </View>

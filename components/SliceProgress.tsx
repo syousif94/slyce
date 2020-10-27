@@ -1,5 +1,12 @@
 import React from 'react';
-import { View, StyleSheet, Text, Image, ScrollView } from 'react-native';
+import {
+  View,
+  StyleSheet,
+  Text,
+  Image,
+  ScrollView,
+  ActivityIndicator,
+} from 'react-native';
 import {
   slyce$,
   useSlyceImages,
@@ -31,47 +38,64 @@ export default function SliceProgress() {
         backgroundColor: 'rgba(0,0,0,0.85)',
       }}
     >
-      <View style={{ height: 150, backgroundColor: '#000' }}>
-        <ScrollView horizontal style={{ height: 150 }}>
-          <View
-            style={{ height: 150, flexDirection: 'row', alignItems: 'center' }}
+      {!images.length ? (
+        <View
+          style={{
+            height: 150,
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        >
+          <ActivityIndicator size="large" color="#fff" />
+          <Text
+            style={{
+              color: '#fff',
+              fontWeight: '700',
+              fontSize: 24,
+              marginTop: 15,
+            }}
           >
-            {images.map((image) => {
-              return (
-                <Image
-                  source={image}
-                  key={image.uri}
-                  style={{
-                    height: 130,
-                    width: (image.width * 150) / image.height,
-                    overflow: 'hidden',
-                    marginHorizontal: 2,
-                  }}
-                />
-              );
-            })}
-          </View>
-        </ScrollView>
-      </View>
-      <Text
-        style={{
-          fontSize: 18,
-          fontWeight: '700',
-          color: '#fff',
-          marginTop: 20,
-        }}
-      >
-        {!images.length ? 'Slycing' : 'Slyced'}
-      </Text>
-      <Text
-        style={{
-          fontSize: 14,
-          color: '#fff',
-          marginTop: 5,
-        }}
-      >
-        {!images.length ? 'hang tight' : 'Saved in order'}
-      </Text>
+            Slycing
+          </Text>
+          <Text
+            style={{
+              color: '#fff',
+              fontSize: 16,
+              marginTop: 8,
+            }}
+          >
+            Hang tight
+          </Text>
+        </View>
+      ) : (
+        <View style={{ height: 150, backgroundColor: '#000' }}>
+          <ScrollView horizontal style={{ height: 150 }}>
+            <View
+              style={{
+                height: 150,
+                flexDirection: 'row',
+                alignItems: 'center',
+              }}
+            >
+              {images.map((image, i) => {
+                return (
+                  <Image
+                    source={image}
+                    key={image.uri}
+                    style={{
+                      height: 130,
+                      width: (image.width * 150) / image.height,
+                      overflow: 'hidden',
+                      marginRight: i < images.length - 1 ? 7 : 0,
+                    }}
+                  />
+                );
+              })}
+            </View>
+          </ScrollView>
+        </View>
+      )}
+
       <View style={{ flexDirection: 'row', marginTop: 20, marginBottom: -70 }}>
         {/** Delete control */}
         <Control
@@ -85,15 +109,11 @@ export default function SliceProgress() {
             clearImage();
           }}
         >
-          <Text
-            style={{
-              color: !images.length ? CONTROL_DISABLED_FILL : '#F61A44',
-              fontSize: 13,
-              fontWeight: '700',
-            }}
-          >
-            Delete
-          </Text>
+          <MaterialCommunityIcons
+            name="delete"
+            size={25}
+            color={!images.length ? CONTROL_DISABLED_FILL : '#fff'}
+          />
         </Control>
         {/** Share control */}
         <Control
@@ -106,15 +126,11 @@ export default function SliceProgress() {
             openInstagram();
           }}
         >
-          <Text
-            style={{
-              color: !images.length ? CONTROL_DISABLED_FILL : '#1AA6F6',
-              fontSize: 15,
-              fontWeight: '700',
-            }}
-          >
-            Open Instagram
-          </Text>
+          <MaterialCommunityIcons
+            name="instagram"
+            size={25}
+            color={!images.length ? CONTROL_DISABLED_FILL : '#fff'}
+          />
         </Control>
       </View>
       <DismissControl />

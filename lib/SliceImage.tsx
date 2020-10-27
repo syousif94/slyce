@@ -4,7 +4,7 @@ import * as ImageManipulator from 'expo-image-manipulator';
 import * as ImageCanvas from './ImageManipulator';
 import { Alert, Platform } from 'react-native';
 import * as MediaLibrary from 'expo-media-library';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useState } from 'react';
 
 import {
   numberOfSlices$,
@@ -134,7 +134,7 @@ export function downloadImage(dataurl: string, filename: string) {
 
 export function useSlyceImages(slyce: ImageSlices | null) {
   const [images, setImages] = useState<IImageSource[]>([]);
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (slyce) {
       const sub = slyce.images.subscribe((val) => {
         setImages(val);
@@ -143,6 +143,8 @@ export function useSlyceImages(slyce: ImageSlices | null) {
       return () => {
         sub.unsubscribe();
       };
+    } else {
+      setImages([]);
     }
   }, [slyce]);
 
