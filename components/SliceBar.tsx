@@ -1,25 +1,19 @@
 import React, { ReactNode, useState } from 'react';
 import { Platform, Text, View, ViewStyle } from 'react-native';
-import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import ActionBarView from './ActionBarView';
 import { useSubject } from '../lib/useSubject';
 import { decrementSlices, incrementSlices } from '../lib/CropSettings';
-import {
-  numberOfSlices$,
-  getRatio,
-  topOffset$,
-  bottomOffset$,
-  rightOffset$,
-  leftOffset$,
-} from '../lib/CropSettings';
+import { numberOfSlices$ } from '../lib/CropSettings';
 import Control, { CONTROL_BG } from './Control';
 import PanoBack from './PanoBack';
 import PlusMinusControl from './PlusMinusControl';
 import TrimControl from './TrimControl';
 import PanoExpand from './PanoExpand';
-import sliceImage from '../lib/SliceImage';
 import { CONTROL_SELECTED_BG } from './Control';
-import { selectedImage$ } from '../lib/SelectedImage';
+import ToggleControlStyle from './SliceToggleControlStyle';
+import SaveButton from './SliceSaveButton';
+import PostButton from './SlicePostButton';
 
 enum EditorState {
   Slice,
@@ -77,59 +71,28 @@ export default function SliceBar() {
   );
 }
 
-function NextButton() {
-  const selectedImage = useSubject(selectedImage$);
-
-  const topOffset = useSubject(topOffset$);
-  const bottomOffset = useSubject(bottomOffset$);
-  const leftOffset = useSubject(leftOffset$);
-  const rightOffset = useSubject(rightOffset$);
-  const slices = useSubject(numberOfSlices$);
-  const ratio = getRatio(
-    selectedImage!,
-    slices,
-    topOffset,
-    bottomOffset,
-    leftOffset,
-    rightOffset
-  );
-
-  const invalidRatio = ratio > 1.91 || ratio < 0.8;
-
-  return (
-    <View style={{ alignItems: 'center', marginBottom: 35 }}>
-      <Control
-        touchableStyle={{
-          ...ToggleControlStyle,
-          paddingVertical: 10,
-          paddingHorizontal: 15,
-        }}
-        onPress={() => {
-          sliceImage();
-        }}
-      >
-        <MaterialIcons name="photo-camera" size={20} color="#fff" />
-        <Text
-          style={{
-            color: invalidRatio ? 'red' : 'yellow',
-            fontSize: 12,
-            fontWeight: '700',
-            marginLeft: 10,
-          }}
-        >
-          SAVE PHOTOS
-        </Text>
-      </Control>
-    </View>
-  );
-}
-
 const SlicesManipulator = () => {
   const slices = useSubject(numberOfSlices$);
 
   return (
-    <View style={{ marginBottom: 40 }} pointerEvents="box-none">
-      <NextButton />
+    <View style={{ marginBottom: 30 }} pointerEvents="box-none">
+      <View
+        style={{
+          justifyContent: 'center',
+          marginBottom: 28,
+          flexDirection: 'row',
+        }}
+      >
+        {Platform.OS === 'ios' ? (
+          <React.Fragment>
+            <PostButton />
+            <View style={{ width: 20 }} />
+          </React.Fragment>
+        ) : null}
+
+        <SaveButton />
+      </View>
+
       <PlusMinusControl
         currentValue={slices}
         disableDecrement={slices <= 2}
@@ -160,13 +123,6 @@ interface IToggleProps {
   controlStyle?: ViewStyle;
   disabled?: boolean;
 }
-
-const ToggleControlStyle: ViewStyle = {
-  flexDirection: 'row',
-  alignItems: 'center',
-  paddingVertical: 4,
-  paddingHorizontal: 10,
-};
 
 const SliceToggle = ({ onToggle, controlStyle, disabled }: IToggleProps) => {
   return (

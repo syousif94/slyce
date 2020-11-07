@@ -10,29 +10,43 @@ export default function PanoList() {
   const insets = useSafeAreaInsets();
   const window = useWindowDimensions();
   const album = useSubject(album$);
-  useEffect(() => {
-    initializeAlbum();
-  }, []);
 
   return (
-    <View style={{ flex: 1, backgroundColor: '#000' }}>
+    <View
+      style={{
+        backgroundColor: '#000',
+        flex: 1,
+      }}
+    >
       <FlatList
         ListEmptyComponent={EmptyPanoView}
+        contentInsetAdjustmentBehavior="never"
         ListHeaderComponent={() => (
           <View
             style={{
-              height: 80 + insets.top,
-              paddingHorizontal: 10,
               paddingTop: insets.top,
+              paddingBottom: 15,
+              justifyContent: 'center',
+              alignItems: 'flex-start',
             }}
           >
-            <Text style={{ fontSize: 30, color: '#fff', fontWeight: '700' }}>
-              Panoramas
-            </Text>
-            <Text style={{ fontSize: 14, color: '#ccc' }}>Tap to slyce</Text>
+            <View
+              style={{
+                marginLeft: 10,
+              }}
+            >
+              <Text
+                style={{
+                  fontSize: 24,
+                  color: '#fff',
+                  fontWeight: '700',
+                }}
+              >
+                Camera Roll
+              </Text>
+            </View>
           </View>
         )}
-        contentInsetAdjustmentBehavior="never"
         style={{ flex: 1 }}
         data={album}
         renderItem={(data) => {

@@ -8,14 +8,17 @@ import 'react-native-gesture-handler';
 import { NavigationContainer } from '@react-navigation/native';
 import createSharedElementStackNavigator from 'react-navigation-shared-element/build/createSharedElementStackNavigator';
 import HomeScreen from './components/HomeScreen';
-import ImagePreview from './components/ImagePreview';
 import Updater from './components/Updater';
+import PanoList from './components/PanoList';
+import PostScreen from './components/PostScreen';
 
 enableScreens();
 
 export type RootStackParamList = {
   Slyce: undefined;
   'Editor - Slyce': { id: string };
+  Library: undefined;
+  Post: { id: string };
 };
 
 const Stack = createSharedElementStackNavigator<RootStackParamList>();
@@ -33,6 +36,15 @@ function MainStack() {
           return [id];
         }}
       />
+      <Stack.Screen
+        name="Post"
+        component={PostScreen}
+        sharedElements={(route, otherRoute, showing) => {
+          const { id } = route.params;
+          return [id];
+        }}
+      />
+      <Stack.Screen name="Library" component={PanoList} />
     </Stack.Navigator>
   );
 }
@@ -44,12 +56,10 @@ export default function App() {
         <NavigationContainer>
           <Modal.Navigator mode="modal" headerMode="none">
             <Modal.Screen name="Main" component={MainStack} />
-            <MainStack />
-            <Modal.Screen component={ImagePreview} name="Preview" />
           </Modal.Navigator>
         </NavigationContainer>
         <Updater />
-        <StatusBar style="light" />
+        <StatusBar style="dark" />
       </View>
     </SafeAreaProvider>
   );

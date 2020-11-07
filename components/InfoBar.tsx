@@ -61,7 +61,7 @@ export default function InfoBar() {
             style={{
               fontSize: 12,
               fontWeight: '700',
-              color: '#fff',
+              color: 'yellow',
             }}
           >
             W
@@ -70,7 +70,7 @@ export default function InfoBar() {
             style={{
               fontSize: 12,
               fontWeight: '700',
-              color: 'yellow',
+              color: '#fff',
               marginLeft: 10,
             }}
           >
@@ -97,7 +97,7 @@ export default function InfoBar() {
             style={{
               fontSize: 12,
               fontWeight: '700',
-              color: '#fff',
+              color: 'yellow',
             }}
           >
             H
@@ -106,7 +106,7 @@ export default function InfoBar() {
             style={{
               fontSize: 12,
               fontWeight: '700',
-              color: 'yellow',
+              color: '#fff',
               marginLeft: 10,
             }}
           >
@@ -132,16 +132,16 @@ export default function InfoBar() {
           style={{
             fontSize: 12,
             fontWeight: '700',
-            color: '#fff',
+            color: invalidRatio ? 'red' : 'yellow',
           }}
         >
-          RATIO
+          ASPECT RATIO
         </Text>
         <Text
           style={{
             fontSize: 12,
             fontWeight: '700',
-            color: invalidRatio ? 'red' : 'yellow',
+            color: '#fff',
             marginLeft: 10,
           }}
         >
@@ -159,7 +159,7 @@ export default function InfoBar() {
             textAlign: 'center',
           }}
         >
-          Stay between 1.91 and 0.8 for social media
+          Valid social media ratios: 1.91 to 0.8
         </Text>
       ) : null}
     </View>

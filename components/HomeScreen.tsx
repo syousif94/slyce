@@ -3,14 +3,15 @@ import React from 'react';
 import { Image, Platform, Text, useWindowDimensions, View } from 'react-native';
 import { openPicker, selectedImage$ } from '../lib/SelectedImage';
 import Control from './Control';
-import PanoList from './PanoList';
+// import PanoList from './PanoList';
 import { resetCropSettings } from '../lib/CropSettings';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import * as Linking from 'expo-linking';
+import MapScreen from './MapScreen';
 
 export default function HomeScreen() {
   if (Platform.OS === 'ios') {
-    return <PanoList />;
+    return <MapScreen />;
   }
 
   const window = useWindowDimensions();

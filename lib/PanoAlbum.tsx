@@ -68,12 +68,21 @@ export function useAssetInfoAddress(info: AssetInfo) {
   const [address, setAddress] = useState('');
 
   useEffect(() => {
+    let canceled = false;
+
     const getAddress = async () => {
       const address = await info.address;
+      if (canceled) {
+        return;
+      }
       setAddress(address);
     };
 
     getAddress();
+
+    return () => {
+      canceled = true;
+    };
   }, [info]);
 
   return address;
