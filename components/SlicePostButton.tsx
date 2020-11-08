@@ -1,11 +1,15 @@
 import React from 'react';
 import { Text } from 'react-native';
-import { MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import Control from './Control';
-import sliceImage from '../lib/SliceImage';
 import ToggleControlStyle from './SliceToggleControlStyle';
+import { useNavigation } from '@react-navigation/native';
+import { useSubject } from '../lib/useSubject';
+import { selectedImage$ } from '../lib/SelectedImage';
 
 export default function PostButton() {
+  const navigation = useNavigation();
+  const selectedImage = useSubject(selectedImage$);
   return (
     <Control
       touchableStyle={{
@@ -14,7 +18,7 @@ export default function PostButton() {
         paddingHorizontal: 15,
       }}
       onPress={() => {
-        sliceImage();
+        navigation.navigate('Post', { id: selectedImage?.id });
       }}
     >
       <MaterialCommunityIcons

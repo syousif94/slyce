@@ -77,7 +77,7 @@ export default function ImagePreview({ id }: IImageEditorSharedElement) {
 
   return (
     <View
-      style={{ flex: 1, backgroundColor: '#000', justifyContent: 'center' }}
+      style={{ flex: 1, backgroundColor: '#13052b', justifyContent: 'center' }}
     >
       <View
         style={{

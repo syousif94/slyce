@@ -83,14 +83,14 @@ const SlicesManipulator = () => {
           flexDirection: 'row',
         }}
       >
+        <SaveButton />
         {Platform.OS === 'ios' ? (
           <React.Fragment>
-            <PostButton />
             <View style={{ width: 20 }} />
           </React.Fragment>
         ) : null}
 
-        <SaveButton />
+        <PostButton />
       </View>
 
       <PlusMinusControl

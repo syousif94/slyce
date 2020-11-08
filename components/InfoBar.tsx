@@ -152,7 +152,7 @@ export default function InfoBar() {
         <Text
           style={{
             color: '#fff',
-            fontSize: 12,
+            fontSize: 14,
             fontWeight: '500',
             marginTop: 13,
             marginHorizontal: 20,

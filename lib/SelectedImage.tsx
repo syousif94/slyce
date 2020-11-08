@@ -7,6 +7,7 @@ export interface IImageSource {
   height: number;
   width: number;
   uri: string;
+  id?: string;
 }
 
 type ImageAsset = IImageSource | null;

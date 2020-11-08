@@ -1,13 +1,20 @@
 import React from 'react';
-import { View, Image, useWindowDimensions, Text } from 'react-native';
+import {
+  View,
+  Image,
+  useWindowDimensions,
+  Text,
+  TextInput,
+  ScrollView,
+} from 'react-native';
 import SharedElement from 'react-navigation-shared-element/build/SharedElement';
 import { StackScreenProps } from '@react-navigation/stack';
 import { RootStackParamList } from '../App';
 import { useSubject } from '../lib/useSubject';
 import { selectedImage$ } from '../lib/SelectedImage';
-import { useNavigation } from '@react-navigation/native';
-import { resetCropSettings } from '../lib/CropSettings';
-import Control from './Control';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import PostMapView from './PostMapView';
+import { StatusBar } from 'expo-status-bar';
 
 export default function PostScreen({
   route,
@@ -16,35 +23,60 @@ export default function PostScreen({
   const window = useWindowDimensions();
   const imageHeight =
     (selectedImage.height * window.width) / selectedImage.width;
-  const navigation = useNavigation();
+  const insets = useSafeAreaInsets();
   return (
     <View
-      style={{ backgroundColor: '#000', justifyContent: 'center', flex: 1 }}
+      style={{
+        backgroundColor: '#fff',
+        flex: 1,
+      }}
     >
-      <SharedElement id={route.params.id}>
-        <Image
-          source={selectedImage}
-          style={{ height: imageHeight, width: window.width }}
+      <ScrollView style={{ flex: 1 }} contentInsetAdjustmentBehavior="never">
+        <Text
+          style={{
+            color: '#000',
+            marginHorizontal: 20,
+            fontSize: 22,
+            fontWeight: '700',
+            marginTop: insets.top,
+            marginBottom: 8,
+          }}
+        >
+          Post on Slyce
+        </Text>
+        <SharedElement id={route.params.id}>
+          <Image
+            source={selectedImage}
+            style={{ height: imageHeight, width: window.width }}
+          />
+        </SharedElement>
+        <Text
+          style={{
+            color: '#666',
+            marginHorizontal: 35,
+            fontSize: 13,
+            fontWeight: '700',
+            marginTop: 20,
+            marginBottom: 8,
+          }}
+        >
+          Notes
+        </Text>
+        <TextInput
+          multiline
+          style={{
+            marginHorizontal: 20,
+            backgroundColor: '#f2f2f2',
+            borderRadius: 10,
+            height: 130,
+            paddingTop: 13,
+            paddingLeft: 15,
+            color: '#000',
+          }}
         />
-      </SharedElement>
-      <Control
-        touchableStyle={{ marginTop: 20, padding: 8 }}
-        onPress={() => {
-          resetCropSettings();
-          navigation.navigate('Editor - Slyce', { id: route.params.id });
-        }}
-      >
-        <Text style={{ color: '#fff' }}>Split</Text>
-      </Control>
-      <Control
-        touchableStyle={{ marginTop: 20, padding: 8 }}
-        onPress={() => {
-          resetCropSettings();
-          navigation.navigate('Editor - Slyce', { id: route.params.id });
-        }}
-      >
-        <Text style={{ color: '#fff' }}>Post</Text>
-      </Control>
+      </ScrollView>
+      <PostMapView />
+      <StatusBar style="dark" />
     </View>
   );
 }

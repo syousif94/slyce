@@ -43,7 +43,7 @@ export default function TrimControl() {
         style={{
           alignItems: 'center',
           justifyContent: 'center',
-          paddingBottom: 35,
+          paddingBottom: 20,
         }}
         pointerEvents="box-none"
       >

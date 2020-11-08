@@ -53,7 +53,7 @@ export default function SaveButton() {
       />
       <Text
         style={{
-          color: invalidRatio ? 'red' : 'yellow',
+          color: invalidRatio ? '#ccc' : 'yellow',
           fontSize: 12,
           fontWeight: '700',
           marginLeft: 10,

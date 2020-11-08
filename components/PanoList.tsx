@@ -5,6 +5,7 @@ import { album$, initializeAlbum } from '../lib/PanoAlbum';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import PanoItem from './PanoItem';
 import EmptyPanoView from './EmptyPanoView';
+import { StatusBar } from 'expo-status-bar';
 
 export default function PanoList() {
   const insets = useSafeAreaInsets();
@@ -14,7 +15,7 @@ export default function PanoList() {
   return (
     <View
       style={{
-        backgroundColor: '#000',
+        backgroundColor: '#13052b',
         flex: 1,
       }}
     >
@@ -53,6 +54,7 @@ export default function PanoList() {
           return <PanoItem window={window} {...data} />;
         }}
       />
+      <StatusBar style="light" />
     </View>
   );
 }

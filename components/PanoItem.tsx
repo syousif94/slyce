@@ -13,6 +13,7 @@ import { selectImage } from '../lib/SelectedImage';
 import SharedElement from 'react-navigation-shared-element/build/SharedElement';
 import { useNavigation } from '@react-navigation/native';
 import { resetCropSettings } from '../lib/CropSettings';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 interface IPanoItem {
   item: MediaLibrary.Asset;
@@ -26,7 +27,7 @@ export default function PanoItem({ item: asset, index, window }: IPanoItem) {
   const info = getAssetInfo(asset);
   const address = useAssetInfoAddress(info);
   return (
-    <View style={{ backgroundColor: '#000' }}>
+    <View>
       <TouchableOpacity
         style={{ height: height, overflow: 'hidden' }}
         onPress={() => {
@@ -45,16 +46,47 @@ export default function PanoItem({ item: asset, index, window }: IPanoItem) {
             }}
           />
         </SharedElement>
-        <View style={{ paddingHorizontal: 10, paddingTop: 10 }}>
-          <Text style={{ color: '#fff', fontWeight: '700' }} numberOfLines={1}>
-            {address}
-          </Text>
-          <Text style={{ color: '#ccc' }} numberOfLines={1}>
-            created {info.createdAt.from}
-          </Text>
-          <Text style={{ color: '#ccc' }} numberOfLines={1}>
-            updated {info.updatedAt.from}
-          </Text>
+        <View
+          style={{
+            paddingHorizontal: 10,
+            paddingTop: 10,
+            flexDirection: 'row',
+          }}
+        >
+          <View style={{ flex: 1 }}>
+            <Text
+              style={{
+                color: '#999999',
+                fontWeight: '600',
+                fontSize: 12,
+                marginBottom: 2,
+              }}
+              numberOfLines={1}
+            >
+              {info.createdAt.date} ({info.createdAt.from})
+            </Text>
+            <Text
+              style={{ color: '#fff', fontWeight: '700', marginBottom: 5 }}
+              numberOfLines={1}
+            >
+              {address}
+            </Text>
+            <Text style={{ color: '#ccc' }} numberOfLines={1}>
+              updated {info.updatedAt.from}
+            </Text>
+          </View>
+          <View
+            style={{
+              justifyContent: 'center',
+              paddingHorizontal: 5,
+            }}
+          >
+            <MaterialCommunityIcons
+              name="chevron-right"
+              size={18}
+              color="rgba(255,255,255,0.6)"
+            />
+          </View>
         </View>
       </TouchableOpacity>
     </View>

@@ -24,7 +24,7 @@ interface AssetInfo {
 
 const assetCache = new Map<string, AssetInfo>();
 
-const dateFormat = 'ddd MMM D, YYYY [at] h:mma';
+const dateFormat = 'ddd M/DD/YY h:mma';
 
 function formatTime(epoch: number): AssetDate {
   const time = dayjs(epoch);
@@ -34,6 +34,10 @@ function formatTime(epoch: number): AssetDate {
     date,
     from,
   };
+}
+
+export function getAssetInfoFromCache(id: string) {
+  return assetCache.get(id);
 }
 
 export function getAssetInfo(asset: MediaLibrary.Asset): AssetInfo {

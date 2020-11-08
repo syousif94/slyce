@@ -18,6 +18,7 @@ import CropBox from './CropBox';
 import { previewMode$, PreviewMode } from '../lib/PreviewModes';
 import ImagePreview from './ImagePreview';
 import SliceProgress from './SliceProgress';
+import { StatusBar } from 'expo-status-bar';
 
 export default function ImageEditor({
   route,
@@ -25,7 +26,7 @@ export default function ImageEditor({
   const id = route.params.id;
 
   return (
-    <View style={{ backgroundColor: '#000', flex: 1 }}>
+    <View style={{ backgroundColor: '#13052b', flex: 1 }}>
       <KeyboardAvoidingView
         enabled={Platform.OS === 'ios'}
         behavior="padding"
@@ -99,6 +100,7 @@ function ImagePanView({ id }: IImageEditorSharedElement) {
 
         <CropBox />
       </View>
+      <StatusBar style="light" />
     </ScrollView>
   );
 }
