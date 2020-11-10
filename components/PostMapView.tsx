@@ -1,10 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { View, Image } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
-import { getAssetInfoFromCache } from '../lib/PanoAlbum';
 import { selectedImage$ } from '../lib/SelectedImage';
 import * as MediaLibrary from 'expo-media-library';
 import { useSubject } from '../lib/useSubject';
+import { getAssetLocation } from '../lib/SubmitPano';
 
 export default function PostMapView() {
   const mapRef = useRef<MapView | null>(null);
@@ -16,11 +16,12 @@ export default function PostMapView() {
     const onMount = async () => {
       const id = selectedImage$.value?.id;
       if (id) {
-        const info = getAssetInfoFromCache(id);
-        const location = await info?.coordinates;
+        const location = await getAssetLocation(id);
+
         if (unmounted || !location) {
           return;
         }
+
         setLocation(location);
 
         mapRef.current?.animateToRegion(

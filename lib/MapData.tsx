@@ -8,6 +8,8 @@ export enum MapSource {
   Personal,
 }
 
+export const selectedMarkerData$ = new BehaviorSubject<MapAsset | null>(null);
+
 export const mapSource$ = new BehaviorSubject<MapSource>(MapSource.World);
 
 export const mappedPanos$ = new BehaviorSubject<MapAsset[]>([]);
@@ -20,7 +22,7 @@ export interface MapAsset extends MediaLibrary.Asset {
   location: MediaLibrary.Location | undefined;
 }
 
-let userAssets = new Map<string, MapAsset>();
+export const userAssets = new Map<string, MapAsset>();
 
 export async function initializeUserMap() {
   const mapCacheJson = await AsyncStorage.getItem('map-cache');

@@ -1,17 +1,22 @@
 import React, { useEffect, useRef, MutableRefObject, useState } from 'react';
-import { View, StyleSheet, Text, TouchableOpacity, Image } from 'react-native';
-import MapView from 'react-native-maps';
-import Control from './Control';
-import { MaterialCommunityIcons, Feather } from '@expo/vector-icons';
+import { View, Text, TouchableOpacity, Image } from 'react-native';
+import { Feather } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import PhotoSourceSegment from './PhotoSourceSegment';
-import { album$, initializeAlbum } from '../lib/PanoAlbum';
-import { Marker, Callout } from 'react-native-maps';
+import { initializeAlbum } from '../lib/PanoAlbum';
+import { Marker } from 'react-native-maps';
+/* @ts-ignore */
 import ClusteredMapView from 'react-native-maps-super-cluster';
-import { useSubject } from '../lib/useSubject';
-import { mappedPanos$, MapAsset, initializeUserMap } from '../lib/MapData';
+import {
+  mappedPanos$,
+  MapAsset,
+  initializeUserMap,
+  selectedMarkerData$,
+} from '../lib/MapData';
 import { sampleTime } from 'rxjs/operators';
+import PanoCard from './MapPanoCard';
+import { useSubject } from '../lib/useSubject';
 
 export default function MapScreen() {
   const insets = useSafeAreaInsets();
@@ -31,22 +36,33 @@ export default function MapScreen() {
         }}
       />
       <PostButton />
+      <PanoCard />
     </View>
   );
 }
 
-function renderMarker(data: MapAsset) {
+function MapMarker({ asset }: { asset: MapAsset }) {
+  const selectedMarkerData = useSubject(selectedMarkerData$);
+  const selected = selectedMarkerData?.id === asset.id;
   return (
-    <Marker key={data.id} coordinate={data.location!}>
+    <Marker
+      stopPropagation
+      key={asset.id}
+      coordinate={asset.location!}
+      onPress={() => {
+        selectedMarkerData$.next(asset);
+      }}
+    >
       <View
         style={{
-          padding: 2,
           backgroundColor: '#fff',
           borderRadius: 6,
+          borderWidth: 2,
+          borderColor: selected ? 'blue' : 'transparent',
         }}
       >
         <Image
-          source={data}
+          source={asset}
           style={{
             height: 30,
             width: 60,
@@ -58,6 +74,10 @@ function renderMarker(data: MapAsset) {
       </View>
     </Marker>
   );
+}
+
+function renderMarker(asset: MapAsset) {
+  return <MapMarker asset={asset} key={asset.id} />;
 }
 
 function renderCluster(ref: MutableRefObject<any>) {
@@ -138,6 +158,13 @@ function PanoMapView() {
   }, []);
   return (
     <ClusteredMapView
+      onPress={() => {
+        console.log('map pressed');
+        selectedMarkerData$.next(null);
+      }}
+      onMarkerPress={() => {
+        console.log('marker pressed');
+      }}
       style={{ flex: 1 }}
       data={personalData}
       initialRegion={INIT_REGION}
@@ -145,8 +172,8 @@ function PanoMapView() {
       renderMarker={renderMarker}
       renderCluster={renderCluster(ref)}
       edgePadding={{
-        top: insets.top,
-        bottom: insets.bottom || 25,
+        top: insets.top + 100,
+        bottom: insets.bottom + 100,
         left: 35,
         right: 45,
       }}

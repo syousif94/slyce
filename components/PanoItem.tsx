@@ -69,7 +69,7 @@ export default function PanoItem({ item: asset, index, window }: IPanoItem) {
               style={{ color: '#fff', fontWeight: '700', marginBottom: 5 }}
               numberOfLines={1}
             >
-              {address}
+              {address || 'No Location Data'}
             </Text>
             <Text style={{ color: '#ccc' }} numberOfLines={1}>
               updated {info.updatedAt.from}
