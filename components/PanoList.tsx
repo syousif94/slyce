@@ -15,7 +15,7 @@ export default function PanoList() {
   return (
     <View
       style={{
-        backgroundColor: '#13052b',
+        backgroundColor: '#000',
         flex: 1,
       }}
     >
@@ -33,7 +33,7 @@ export default function PanoList() {
           >
             <View
               style={{
-                marginLeft: 10,
+                marginLeft: 5,
               }}
             >
               <Text
@@ -54,7 +54,6 @@ export default function PanoList() {
           return <PanoItem window={window} {...data} />;
         }}
       />
-      <StatusBar style="light" />
     </View>
   );
 }

@@ -27,73 +27,69 @@ export default function PanoItem({ item: asset, index, window }: IPanoItem) {
   const info = getAssetInfo(asset);
   const address = useAssetInfoAddress(info);
   return (
-    <View>
-      <TouchableOpacity
-        style={{ height: height, overflow: 'hidden' }}
-        onPress={() => {
-          selectImage(asset);
-          resetCropSettings();
-          navigation.navigate('Editor - Slyce', { id: asset.id });
+    <TouchableOpacity
+      style={{ height: height, overflow: 'hidden' }}
+      onPress={() => {
+        selectImage(asset);
+        resetCropSettings();
+        navigation.navigate('Post', { id: asset.id });
+      }}
+      onLongPress={() => {
+        selectImage(asset);
+        resetCropSettings();
+        navigation.navigate('Editor - Slyce', { id: asset.id });
+      }}
+    >
+      <View
+        style={{
+          paddingHorizontal: 5,
+          flexDirection: 'row',
         }}
       >
-        <SharedElement id={asset.id}>
-          <Image
-            source={asset}
+        <View style={{ flex: 1 }}>
+          <Text style={{ color: '#fff', fontWeight: '700' }} numberOfLines={1}>
+            {address || 'No Location Data'}
+          </Text>
+          <Text
             style={{
-              height: height - PanoItem.infoHeight,
-              width: window.width,
-              overflow: 'hidden',
+              color: '#ccc',
+              fontWeight: '600',
+              fontSize: 12,
+              marginBottom: 10,
             }}
-          />
-        </SharedElement>
+            numberOfLines={1}
+          >
+            updated {info.updatedAt.from}
+          </Text>
+        </View>
         <View
           style={{
-            paddingHorizontal: 10,
-            paddingTop: 10,
-            flexDirection: 'row',
+            justifyContent: 'center',
+            paddingHorizontal: 5,
           }}
         >
-          <View style={{ flex: 1 }}>
-            <Text
-              style={{
-                color: '#999999',
-                fontWeight: '600',
-                fontSize: 12,
-                marginBottom: 2,
-              }}
-              numberOfLines={1}
-            >
-              {info.createdAt.date} ({info.createdAt.from})
-            </Text>
-            <Text
-              style={{ color: '#fff', fontWeight: '700', marginBottom: 5 }}
-              numberOfLines={1}
-            >
-              {address || 'No Location Data'}
-            </Text>
-            <Text style={{ color: '#ccc' }} numberOfLines={1}>
-              updated {info.updatedAt.from}
-            </Text>
-          </View>
-          <View
-            style={{
-              justifyContent: 'center',
-              paddingHorizontal: 5,
-            }}
-          >
-            <MaterialCommunityIcons
-              name="chevron-right"
-              size={18}
-              color="rgba(255,255,255,0.6)"
-            />
-          </View>
+          <MaterialCommunityIcons
+            name="chevron-right"
+            size={18}
+            color="rgba(255,255,255,0.6)"
+          />
         </View>
-      </TouchableOpacity>
-    </View>
+      </View>
+      <SharedElement id={asset.id}>
+        <Image
+          source={asset}
+          style={{
+            height: height - PanoItem.infoHeight,
+            width: window.width,
+            overflow: 'hidden',
+          }}
+        />
+      </SharedElement>
+    </TouchableOpacity>
   );
 }
 
-PanoItem.infoHeight = 90;
+PanoItem.infoHeight = 60;
 
 PanoItem.getHeight = function (
   item: MediaLibrary.Asset,

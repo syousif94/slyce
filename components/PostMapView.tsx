@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { View, Image } from 'react-native';
+import { View, Image, StyleSheet, Text } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import { selectedImage$ } from '../lib/SelectedImage';
 import * as MediaLibrary from 'expo-media-library';
@@ -27,8 +27,8 @@ export default function PostMapView() {
         mapRef.current?.animateToRegion(
           {
             ...location,
-            latitudeDelta: 0.002,
-            longitudeDelta: 0.002,
+            latitudeDelta: 0.005,
+            longitudeDelta: 0.005,
           },
           0
         );
@@ -44,7 +44,7 @@ export default function PostMapView() {
 
   return (
     <View style={{ height: '30%' }}>
-      <MapView ref={mapRef} style={{ flex: 1 }}>
+      <MapView ref={mapRef} style={{ flex: 1 }} mapType="hybrid">
         {location ? (
           <Marker coordinate={location}>
             <View
@@ -68,6 +68,28 @@ export default function PostMapView() {
           </Marker>
         ) : null}
       </MapView>
+      {!location ? (
+        <View
+          style={{
+            ...StyleSheet.absoluteFillObject,
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        >
+          <View
+            style={{
+              paddingHorizontal: 7,
+              paddingVertical: 5,
+              borderRadius: 5,
+              backgroundColor: 'rgba(100,100,100, 0.7)',
+            }}
+          >
+            <Text style={{ color: '#fff', fontSize: 13, fontWeight: '700' }}>
+              Location required to post on Slyce
+            </Text>
+          </View>
+        </View>
+      ) : null}
     </View>
   );
 }

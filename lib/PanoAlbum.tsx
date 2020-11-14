@@ -24,7 +24,7 @@ interface AssetInfo {
 
 const assetCache = new Map<string, AssetInfo>();
 
-const dateFormat = 'ddd M/DD/YY h:mma';
+const dateFormat = 'h:mma ddd M/DD/YY ';
 
 function formatTime(epoch: number): AssetDate {
   const time = dayjs(epoch);

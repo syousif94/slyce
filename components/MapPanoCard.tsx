@@ -100,6 +100,11 @@ export default function PanoCard() {
             onPress={() => {
               selectImage(selectedMarkerData);
               resetCropSettings();
+              navigation.navigate('Post', { id: selectedMarkerData.id });
+            }}
+            onLongPress={() => {
+              selectImage(selectedMarkerData);
+              resetCropSettings();
               navigation.navigate('Editor - Slyce', {
                 id: selectedMarkerData.id,
               });

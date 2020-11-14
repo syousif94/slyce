@@ -36,6 +36,15 @@ export default function ImageEditor({
       >
         <ImageView id={id} />
       </KeyboardAvoidingView>
+      <View
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          bottom: 0,
+          width: 80,
+        }}
+      />
       <SliceBar />
       <InfoBar />
       <SliceProgress />

@@ -6,10 +6,39 @@ import { BehaviorSubject } from 'rxjs';
 import { IImageSource } from './SelectedImage';
 import * as ImageManipulator from 'expo-image-manipulator';
 import * as geofirex from 'geofirex';
+import AsyncStorage from '@react-native-community/async-storage';
 const geo = geofirex.init(firebase);
 
 export const caption$ = new BehaviorSubject('');
 export const instagram$ = new BehaviorSubject('');
+
+export function saveInstagram() {
+  const trimmedIg = instagram$.value.trim();
+  if (trimmedIg.length) {
+    AsyncStorage.setItem('instagram', trimmedIg).catch((err) => {});
+  }
+}
+
+export async function loadInstagram() {
+  const ig = await AsyncStorage.getItem('instagram');
+
+  if (ig) {
+    instagram$.next(ig);
+  }
+}
+
+export const submitting$ = new BehaviorSubject(false);
+
+export const submissionError$ = new BehaviorSubject<string | null>(null);
+
+export const submissionCompleted$ = new BehaviorSubject(false);
+
+export function resetSubmission() {
+  currentUploadTask?.task.cancel();
+  submissionCompleted$.next(false);
+  submissionError$.next(null);
+  submitting$.next(true);
+}
 
 export async function getAssetLocation(id: string) {
   let location: MediaLibrary.Location | undefined;
@@ -26,15 +55,18 @@ export async function getAssetLocation(id: string) {
   return location;
 }
 
-export const submitting$ = new BehaviorSubject(false);
+let currentUploadTask: firebase.storage.UploadTaskSnapshot | null = null;
 
-export const submissionError$ = new BehaviorSubject<string | null>(null);
-
-export const submissionCompleted$ = new BehaviorSubject(false);
+export function cancelUpload() {
+  currentUploadTask?.task.cancel();
+  submissionCompleted$.next(false);
+  submissionError$.next(null);
+  submitting$.next(false);
+}
 
 export async function submitPano(asset: IImageSource) {
   console.log('submitting pano');
-  submitting$.next(true);
+  resetSubmission();
 
   try {
     if (!asset.id) {
@@ -53,7 +85,7 @@ export async function submitPano(asset: IImageSource) {
       { compress: 0.8 }
     );
     console.log('uploading pano');
-    await uploadImage(scaledPano.uri, doc.id);
+    currentUploadTask = await uploadImage(scaledPano.uri, doc.id);
     await doc.set({
       caption: caption$.value,
       height: scaledPano.height,
@@ -64,12 +96,11 @@ export async function submitPano(asset: IImageSource) {
     });
     submissionCompleted$.next(true);
     console.log('submitted pano');
+    currentUploadTask = null;
   } catch (e) {
     console.log(e);
     submissionError$.next(e.message);
   }
-
-  submitting$.next(false);
 }
 
 async function uploadImage(uri: string, key: string) {

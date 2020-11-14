@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, Image } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
-import PhotoSourceSegment from './PhotoSourceSegment';
+import MapSourceSegments from './MapSourceSegments';
 import { initializeAlbum } from '../lib/PanoAlbum';
 import { Marker } from 'react-native-maps';
 /* @ts-ignore */
@@ -17,25 +17,15 @@ import {
 import { sampleTime } from 'rxjs/operators';
 import PanoCard from './MapPanoCard';
 import { useSubject } from '../lib/useSubject';
+import BrowseList from './BrowseList';
+import MapViewSegments from './MapViewSegments';
 
 export default function MapScreen() {
-  const insets = useSafeAreaInsets();
-
   return (
     <View style={{ flex: 1, backgroundColor: '#000' }}>
       <PanoMapView />
-      <PhotoSourceSegment
-        style={{
-          backgroundColor: 'rgba(0, 0, 0, 0.5)',
-          borderRadius: 8,
-          position: 'absolute',
-          bottom: insets.bottom,
-          left: 10,
-          width: 150,
-          height: 38,
-        }}
-      />
-      <PostButton />
+      <BrowseList />
+      <MapViewSegments />
       <PanoCard />
     </View>
   );
@@ -158,6 +148,8 @@ function PanoMapView() {
   }, []);
   return (
     <ClusteredMapView
+      rotateEnabled={false}
+      mapType="hybrid"
       onPress={() => {
         console.log('map pressed');
         selectedMarkerData$.next(null);
@@ -172,8 +164,8 @@ function PanoMapView() {
       renderMarker={renderMarker}
       renderCluster={renderCluster(ref)}
       edgePadding={{
-        top: insets.top + 100,
-        bottom: insets.bottom + 100,
+        top: insets.top + 180,
+        bottom: insets.bottom + 90,
         left: 35,
         right: 45,
       }}

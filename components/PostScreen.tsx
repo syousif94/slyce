@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import React, { ReactNode, useEffect } from 'react';
 import {
   View,
   Image,
@@ -16,7 +16,16 @@ import { selectedImage$ } from '../lib/SelectedImage';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import PostMapView from './PostMapView';
 import { StatusBar } from 'expo-status-bar';
-import { caption$, instagram$, submitPano } from '../lib/SubmitPano';
+import {
+  caption$,
+  instagram$,
+  submitPano,
+  saveInstagram,
+  loadInstagram,
+} from '../lib/SubmitPano';
+import PostProgress from './PostProgress';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
 
 export default function PostScreen({
   route,
@@ -46,12 +55,20 @@ export default function PostScreen({
         >
           Post on Slyce
         </Text>
-        <SharedElement id={route.params.id}>
-          <Image
-            source={selectedImage}
-            style={{ height: imageHeight, width: window.width }}
-          />
-        </SharedElement>
+        <View
+          style={{
+            height: imageHeight,
+            width: window.width,
+          }}
+        >
+          <SharedElement id={route.params.id}>
+            <Image
+              source={selectedImage}
+              style={{ height: imageHeight, width: window.width }}
+            />
+          </SharedElement>
+          <CropButton />
+        </View>
         <InputLabel>Caption</InputLabel>
         <CaptionInput />
         <InputLabel>Instagram</InputLabel>
@@ -59,6 +76,7 @@ export default function PostScreen({
         <SubmitButton />
       </ScrollView>
       <PostMapView />
+      <PostProgress />
       <StatusBar style="dark" />
     </View>
   );
@@ -103,13 +121,55 @@ function CaptionInput() {
   );
 }
 
+function CropButton() {
+  const navigation = useNavigation();
+  return (
+    <TouchableOpacity
+      style={{
+        position: 'absolute',
+        bottom: 7,
+        right: 7,
+        borderRadius: 5,
+        backgroundColor: 'rgba(0,0,0,0.5)',
+        padding: 5,
+        flexDirection: 'row',
+        alignItems: 'center',
+      }}
+      onPress={() => {
+        navigation.navigate('Editor - Slyce', { id: selectedImage$.value!.id });
+      }}
+    >
+      <MaterialCommunityIcons name="crop" size={16} color="#fff" />
+      <Text
+        style={{
+          fontSize: 12,
+          fontWeight: '700',
+          color: '#fff',
+          marginLeft: 7,
+        }}
+      >
+        CROP
+      </Text>
+    </TouchableOpacity>
+  );
+}
+
 function InstagramInput() {
   const value = useSubject(instagram$);
+  useEffect(() => {
+    loadInstagram();
+  }, []);
   return (
     <TextInput
+      autoCapitalize="none"
+      spellCheck={false}
+      autoCorrect={false}
       value={value}
       onChangeText={(text) => {
         instagram$.next(text);
+      }}
+      onBlur={() => {
+        saveInstagram();
       }}
       style={{
         marginHorizontal: 20,

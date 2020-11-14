@@ -6,11 +6,12 @@ import {
   TouchableOpacity,
   LayoutRectangle,
 } from 'react-native';
-import React, { useRef, ReactNode, useState } from 'react';
+import React, { useRef, ReactNode, useState, useEffect } from 'react';
 
 const { timing, Value } = Animated;
 
 export interface SegmentProps {
+  initialIndex?: number;
   children: ReactNode;
   style?: ViewStyle;
   sliderBackground?: string;
@@ -22,12 +23,25 @@ export default function SegmentSwitch({
   style,
   sliderBackground = '#fff',
   onPress,
+  initialIndex = 0,
 }: SegmentProps) {
-  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [selectedIndex, setSelectedIndex] = useState(initialIndex);
   const value = useRef(new Value(0));
 
   const [layout, setLayout] = useState<LayoutRectangle | null>();
+  const initialIndexSet = useRef(false);
+
   const childrenLen = React.Children.count(children);
+
+  useEffect(() => {
+    if (initialIndexSet.current || !layout) {
+      return;
+    }
+
+    value.current.setValue(initialIndex / childrenLen);
+    initialIndexSet.current = true;
+  }, [layout]);
+
   return (
     <View
       style={{ ...style }}

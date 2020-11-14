@@ -6,6 +6,7 @@ import ToggleControlStyle from './SliceToggleControlStyle';
 import { useNavigation } from '@react-navigation/native';
 import { useSubject } from '../lib/useSubject';
 import { selectedImage$ } from '../lib/SelectedImage';
+import { cancelUpload } from '../lib/SubmitPano';
 
 export default function PostButton() {
   const navigation = useNavigation();
@@ -18,6 +19,7 @@ export default function PostButton() {
         paddingHorizontal: 15,
       }}
       onPress={() => {
+        cancelUpload();
         navigation.navigate('Post', { id: selectedImage?.id });
       }}
     >
